@@ -6,15 +6,16 @@ import seaborn as sns
 import matplotlib
 
 matplotlib.use('Qt5Agg')
+delay = 2
 
-male_day = pd.read_csv(
-    r'D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline/maleday_5min.csv')
+male_day = pd.read_csv(r'D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline/fang_data'
+                       r'/male-day_round1_{}min.csv'.format(delay))
 male_night = pd.read_csv(r'D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline'
-                         r'/malenight_5min.csv')
+                         r'/fang_data/male-night_round1_{}min.csv'.format(delay))
 female_day = pd.read_csv(r'D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline'
-                         r'/femaleday_5min.csv')
+                         r'/fang_data/female-day_round1_{}min.csv'.format(delay))
 female_night = pd.read_csv(r'D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline'
-                           r'/femalenight_5min.csv')
+                           r'/fang_data/female-night_round1_{}min.csv'.format(delay))
 
 # male_day = pd.read_csv(r'D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/state_convert/v2'
 #                        r'/behavior_freline/maleday.csv')
@@ -77,8 +78,6 @@ del female_night['Unnamed: 0']
 """
     加权求和
 """
-
-
 # for i in range(len(male_day)):
 #     male_day['mean'].iloc[i] = np.mean(male_day.iloc[i, :])
 
@@ -116,8 +115,8 @@ def pre_data(data_name, statename):
         cali_data.append(a)
 
     data_list['mean'] = cali_data
-    data_list['time'] = [i for i in range(0, 60, 2)]
-    data_list["species"] = ['{}'.format(name)] * 30
+    data_list['time'] = [i for i in range(delay, 60+delay, delay)]   # 间隔时长
+    data_list["species"] = ['{}'.format(name)] * int(60/delay)    # 间隔时长
     # data_list['time'] = [i for i in range(10, 70, 10)]
     # data_list["species"] = ['{}'.format(name)] * 6
     return data_list
@@ -151,11 +150,16 @@ plt.xlabel('Time (min)', fontsize=15)
 plt.ylabel('Fraction', fontsize=15)
 plt.tight_layout()
 plt.show()
-# plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline/figure'
-#             '/fre_line_2min_v2.tiff', dpi=300)
+plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline/fang_data'
+            '/figure/active_line_{}min.tiff'.format(delay), dpi=300)
+plt.close()
 #
+"""
+    fit data plot
+"""
 # fig, ax = plt.subplots(figsize=(8, 8), dpi=300)
 # ax = fig.add_subplot(111)
+
 ax = sns.lmplot(data=data, x="time", y="mean", hue="species", palette=violon_color,
                 height=7, aspect=1.4, legend=False)
 # ax = sns.lmplot(data=data, x="time", y="mean", hue="species", palette=violon_color)
@@ -163,13 +167,24 @@ ax.set_axis_labels("Time (min)", "Fraction", fontsize=20)
 # ax.fig.set_figwidth(8)
 # ax.fig.set_figheight(5)
 # sns.set(rc={'figure.figsize': (8, 8)})
-# ax.set(xticks=np.arange(10, 70, 10), yticks=np.arange(-1, 1.6, 0.5))
-ax.set_xticklabels(np.arange(10, 70, 10), rotation=0, size=15)
+"""
+    下面2行一块使用
+"""
+ax.set(xticks=np.arange(0, 60, 5), yticks=np.arange(-0.3, 0.5, 0.1))
+ax.set_xticklabels(np.arange(0, 60, 5), rotation=0, size=15)
+# ax.set(xticks=np.arange(delay, 60+delay, delay*5))
+# ax.set_xticklabels(np.arange(delay, 60+delay, delay*5), rotation=0, size=15)
+
 # ax.set_yticklabels(np.arange(-1, 1.6, 0.5), rotation=0, size=15)
 # ax.set_xticklabels(np.arange(0, 61, 10), size=15)
 ax.set_yticklabels(size=15)
 plt.legend(bbox_to_anchor=(1, 0), loc=3, borderaxespad=0, fontsize=18, frameon=False)
 ax.tight_layout()
+plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline/fang_data'
+            '/figure/active_fitline_{}min.tiff'.format(delay), dpi=300)
+
+
+
 
 # ax = plt.gca()
 # ax.spines['bottom'].set_linewidth(2)

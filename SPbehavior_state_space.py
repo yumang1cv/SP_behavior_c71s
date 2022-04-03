@@ -40,9 +40,9 @@ matplotlib.use('Qt5Agg')
 #     Immobility:{7、Sniffing:[1, 4, 6, 10, 14, 28, 29, 30],8、 Grooming:[39, 40], 9、Diving:[11, 25], 10、Rising:[2]}
 # """
 
-# color_list = ['#D53624', '#FF6F91', '#FF9671', '#FFC75F', '#C34A36',
-#               '#00C2A8', '#00a3af', '#008B74', '#D5CABD', '#D65DB1',
-#               '#cb3a56', '#845EC2', '#B39CD0', '#98d98e']
+color_list = ['#D53624', '#FF6F91', '#FF9671', '#FFC75F', '#C34A36',
+              '#00C2A8', '#00a3af', '#008B74', '#D5CABD', '#D65DB1',
+              '#cb3a56', '#845EC2', '#B39CD0', '#98d98e']
 # """
 #     Spontaneous Behavior Class Combine-Final
 #     1、Running:[15, 16, 22] '#D53624'     2、Fast walking/Trotting:[8] '#FF6F91'          3、Right turning:[7, 31, 34] '#FF9671'
@@ -53,9 +53,9 @@ matplotlib.use('Qt5Agg')
 #     14、Rearing/Diving:[11, 25]  '#98d98e'
 # """
 
-color_list = ['#fd7f69', '#fa9b8b', '#64b0fb', '#87c0f9', '#fcb83c',
-              '#3e9a3e', '#95c695', '#78b778', '#fc3cfc', '#41a0fd',
-              '#fddc2f', '#fae15e', '#8b8b8b', '#5ca95c']
+# color_list = ['#fd7f69', '#fa9b8b', '#64b0fb', '#87c0f9', '#fcb83c',
+#               '#3e9a3e', '#95c695', '#78b778', '#fc3cfc', '#41a0fd',
+#               '#fddc2f', '#fae15e', '#8b8b8b', '#5ca95c']
 """
     Spontaneous Behavior Class Combine-YJL
     1、Running:[15, 16, 22] '#fd7f69'     2、Fast walking/Trotting:[8] '#fa9b8b'          3、Right turning:[7, 31, 34] '#64b0fb'
@@ -193,41 +193,42 @@ def data_combine(file_path, special_time_start, special_time_end):
 
 
 if __name__ == '__main__':
-    a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_circle/',
-                 name="video_info.xlsx", column="gender", element="female")
+    a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang/',
+                 name="video_info.xlsx", column="gender", element="male")
 
-    A = choose_data(a, column='ExperimentTime', element='day')
+    B = choose_data(a, column='roundTime', element=1)
+    A = choose_data(B, column='ExperimentTime', element='night')
 
     # 多条件筛选
-    x = choose_data(A, column='split_number', element=1)  # split_number=1 not have ''
+    x = choose_data(A, column='split_number', element=5)  # split_number=1 not have ''
     df_day = pd.DataFrame(x, columns=["Unique_serial_number"])
     # data = df_day.values.tolist()
     csv_FD = []
     for item in tqdm(df_day['Unique_serial_number']):
         csv_result3 = search_csv(
-            path=r"D:/3D_behavior/Spontaneous_behavior/result_circle/BeAMapping-Final/BeAMapping_replace/",
-            name="rec-{}-G1-2021114230_Feature_Space".format(item))
+            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
+            name="rec-{}-G1-2022114230_Feature_Space".format(item))
         csv_FD.append(csv_result3[0])
 
-    y = choose_data(A, column='split_number', element=1)  # split_number=1 not have ''
+    y = choose_data(A, column='split_number', element=5)  # split_number=1 not have ''
     df_night = pd.DataFrame(y, columns=["Unique_serial_number"])
     # data = df_night.values.tolist()
     csv_FN = []
     for item in tqdm(df_night['Unique_serial_number']):
         csv_result4 = search_csv(
-            path=r"D:/3D_behavior/Spontaneous_behavior/result_circle/BeAMapping-Final/BeAMapping_replace/",
-            name="rec-{}-G1-2021114230_Feature_Space".format(item))
+            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
+            name="rec-{}-G1-2022114230_Feature_Space".format(item))
         csv_FN.append(csv_result4[0])
 
     Male_data = []
-    for i in range(0, 7):
+    for i in range(0, 6):
         single_data = data_combine(csv_FD[i], 0, 17998)
         Male_data.append(single_data)
     # single_data = data_combine(file_list_1[0], 0, 25)
     # Male_data.append(single_data)
 
     Female_data = []
-    for i in range(1, 8):
+    for i in range(0, 6):
         single_data = data_combine(csv_FN[i], 0, 17998)
         # print('第{}个文件sucess'.format(i))
         Female_data.append(single_data)

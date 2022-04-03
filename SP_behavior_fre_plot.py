@@ -30,10 +30,19 @@ color_list = ['#D53624', '#FF6F91', '#FF9671', '#FFC75F', '#C34A36',
               '#00C2A8', '#00a3af', '#008B74', '#D5CABD', '#D65DB1',
               '#cb3a56', '#845EC2', '#B39CD0', '#98d98e']
 
-df1 = pd.read_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre/femaleday.csv')
-df2 = pd.read_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre/femalenight.csv')
-df3 = pd.read_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre/maleday.csv')
-df4 = pd.read_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre/malenight.csv')
+# df1 = pd.read_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre/femaleday.csv')
+# df2 = pd.read_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre/femalenight.csv')
+# df3 = pd.read_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre/maleday.csv')
+# df4 = pd.read_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre/malenight.csv')
+
+df1 = pd.read_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre'
+                  '/behavior_fre_data_fang/female_day_round1.csv')
+df2 = pd.read_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre'
+                  '/behavior_fre_data_fang/female_night_round1.csv')
+df3 = pd.read_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre'
+                  '/behavior_fre_data_fang/male_day_round1.csv')
+df4 = pd.read_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre'
+                  '/behavior_fre_data_fang/male_night_round1.csv')
 
 del df1['Unnamed: 0']
 del df2['Unnamed: 0']
@@ -253,45 +262,51 @@ if __name__ == '__main__':
     # pre_data['time'] = ['female day'] * len(female_day_fre) + ['female night'] * len(female_night_fre) + \
     #                    ['male day'] * len(male_day_fre) + ['male night'] * len(male_night_fre)
 
-    # female_day_fre, female_day_label = data_list(df1)
-    # female_night_fre, female_night_label = data_list(df2)
-    male_day_fre, male_day_label = data_list(df3)
-    male_night_fre, male_night_label = data_list(df4)
-
-    female_fre = male_day_fre + male_night_fre
-    female_label = male_day_label + male_night_label
-
-    behavior_fre = male_day_fre + male_night_fre
-    bahavior_label = male_day_label + male_night_label
-
-    pre_data = pd.DataFrame({'behavior_fre': [], 'behavior_label': [], 'time': []})
-    pre_data['behavior_fre'] = behavior_fre
-    pre_data['behavior_label'] = bahavior_label
-    pre_data['time'] = ['male day'] * len(male_day_fre) + ['male night'] * len(male_night_fre)
-
-    violon_color = ['#D65DB1', '#0081CF', '#FFC75F', '#00C9A7']
-    fig = plt.figure(figsize=(7, 4), dpi=300)
-    ax = fig.add_subplot(111)
-    sns.lineplot(data=pre_data, x="behavior_label", y="behavior_fre", hue='time', alpha=0.8, palette=violon_color[2:4])
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    # ax.set_yticks([1, 3, 5, 7, 9])
-    ax.set_xticks([i for i in range(14)])
-    ax.set_xticklabels(behavior_labels)
-    plt.ylim(0, 25000)
-    ax.set_yticklabels(['0', '0.2', '0.4', '0.6', '0.8', '1.0'])
-    plt.xticks(fontsize=10, rotation=70)
-    plt.yticks(fontsize=10)
-    ax.set_ylabel('behavior frequency', fontsize=12)
-    # ax.set_xlabel('behavior label', fontsize=12)
-    ax.set(xlabel=None)
-    plt.legend(bbox_to_anchor=(1, 0), loc=3, borderaxespad=0, fontsize=7)
-    # plt.legend(loc="upper right", fontsize=9)
-    plt.tight_layout()
-    plt.savefig(
-        "D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre/figure/MDN_line_v2.tiff", dpi=300,
-        transparent=True)
-    plt.show()
+    # # female_day_fre, female_day_label = data_list(df1)
+    # # female_night_fre, female_night_label = data_list(df2)
+    # male_day_fre, male_day_label = data_list(df3)
+    # male_night_fre, male_night_label = data_list(df4)
+    #
+    # # female_fre = female_day_fre + female_night_fre
+    # # female_label = female_day_label + female_night_label
+    #
+    # # behavior_fre = female_day_fre + female_night_fre + male_day_fre + male_night_fre
+    # # bahavior_label = female_day_label + female_night_label + male_day_label + male_night_label
+    #
+    # behavior_fre = male_day_fre + male_night_fre
+    # bahavior_label = male_day_label + male_night_label
+    #
+    # pre_data = pd.DataFrame({'behavior_fre': [], 'behavior_label': [], 'time': []})
+    # pre_data['behavior_fre'] = behavior_fre
+    # pre_data['behavior_label'] = bahavior_label
+    # # pre_data['time'] = ['female day'] * len(female_day_fre) + ['female night'] * len(female_night_fre) \
+    # #                    + ['male day'] * len(male_day_fre) + ['male night'] * len(male_night_fre)
+    #
+    # pre_data['time'] = ['male day'] * len(male_day_fre) + ['male night'] * len(male_night_fre)
+    #
+    # violon_color = ['#D65DB1', '#0081CF', '#FFC75F', '#00C9A7']
+    # fig = plt.figure(figsize=(7, 4), dpi=300)
+    # ax = fig.add_subplot(111)
+    # sns.lineplot(data=pre_data, x="behavior_label", y="behavior_fre", hue='time', alpha=0.8, palette=violon_color[2:4])
+    # ax.spines['right'].set_visible(False)
+    # ax.spines['top'].set_visible(False)
+    # # ax.set_yticks([1, 3, 5, 7, 9])
+    # ax.set_xticks([i for i in range(14)])
+    # ax.set_xticklabels(behavior_labels)
+    # # plt.ylim(0, 25000)
+    # ax.set_yticklabels(['0', '0.2', '0.4', '0.6', '0.8', '1.0', '1.2', '1.4', '1.6'])
+    # plt.xticks(fontsize=10, rotation=70)
+    # plt.yticks(fontsize=10)
+    # ax.set_ylabel('behavior frequency', fontsize=12)
+    # # ax.set_xlabel('behavior label', fontsize=12)
+    # ax.set(xlabel=None)
+    # plt.legend(bbox_to_anchor=(1, 0), loc=3, borderaxespad=0, fontsize=7)
+    # # plt.legend(loc="upper right", fontsize=9)
+    # plt.tight_layout()
+    # plt.savefig(
+    #     "D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_fre/behavior_fre_data_fang"
+    #     "/figure/MDN_line_N6.tiff", dpi=300, transparent=True)
+    # plt.show()
     # plt.close()
 
     """
