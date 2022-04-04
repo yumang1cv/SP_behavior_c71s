@@ -3,6 +3,7 @@ import os
 import sys
 import numpy as np
 import pandas as pd
+import matplotlib
 import matplotlib.pyplot as plt
 from mpl_chord_diagram import chord_diagram
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
@@ -10,6 +11,7 @@ from collections import defaultdict
 import substring
 from tqdm import tqdm
 
+matplotlib.use('Qt5Agg')
 sys.path.append(os.path.abspath(".."))
 
 
@@ -210,23 +212,26 @@ if __name__ == '__main__':
     # # str_grd = "_gradient" if grads[0] else ""
     # plt.tight_layout()
     # plt.show()
-    gender = 'male'
-    ExperimentTime = 'night'
-    for i in range(1, 7):
-        a = read_csv(path=r'D:\\3D_behavior\\Spontaneous_behavior\\result',
-                     name="video_info.xlsx", column='gender', element=gender)
+    gender = 'female'
+    ExperimentTime = 'day'
+    # data_a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang/',
+    #                   name="video_info.xlsx", column='gender', element=gender)
+    data_a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang/',
+                      name="video_info.xlsx", column='roundTime', element=1)
+    data_A = choose_data(data_a, column='ExperimentTime', element=ExperimentTime)
 
-        A = choose_data(a, column='ExperimentTime', element=ExperimentTime)
+    for i in range(1, 7):
+        # B = choose_data(data_A, column='roundTime', element=1)
 
         # 多条件筛选
-        x = choose_data(A, column='split_number', element=i)  # split_number=1 not have ''
+        x = choose_data(data_A, column='split_number', element=i)  # split_number=1 not have ''
         df_day = pd.DataFrame(x, columns=["Unique_serial_number"])
         # data = df_day.values.tolist()
         csv_FD = []
         for item in tqdm(df_day['Unique_serial_number']):
             csv_result3 = search_csv(
-                path=r"D:\\3D_behavior\\Spontaneous_behavior\\result\\BeAMapping-Final\\BeAMapping_replace\\",
-                name="rec-{}-G1-2021114230_Movement_Labels".format(item))
+                path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
+                name="rec-{}-G1-2022114230_Movement_Labels".format(item))
             csv_FD.append(csv_result3[0])
 
         A = 0
@@ -253,8 +258,10 @@ if __name__ == '__main__':
         plt.tight_layout()
         plt.show()
         plt.savefig(
-            "D:/3D_behavior/Spontaneous_behavior/result/analysis_result/state_convert/v2/6_state_v2/M_{}time_{}0~{"
-            "}0min_v2.tiff".format(ExperimentTime, i - 1, i), dpi=300)
+            "D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/state_convert/fang_figure"
+            "/{}time_{}0~{}0min.tiff".format(ExperimentTime, i - 1, i), dpi=300)
+        # plt.savefig("D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/state_convert/fang_figure"
+        #             "/{}_{}time.tiff".format(gender, ExperimentTime), dpi=300)
         plt.close(fig)
 
 """   

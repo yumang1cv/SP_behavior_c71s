@@ -6,6 +6,7 @@ import os
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import matplotlib
+
 matplotlib.use('Qt5Agg')
 
 # color_list = sns.color_palette("Spectral", 40)
@@ -186,74 +187,90 @@ def data_combine(file_path, special_time_start, special_time_end):
     special_time1 = special_time_start
     special_time2 = special_time_end
     data = []
-    for i in range(1, len(color_list)+1):
+    for i in range(1, len(color_list) + 1):
         behavior = pre_data(file_path, i, special_time1, special_time2)
         data.append(behavior)
     return data
 
 
 if __name__ == '__main__':
+    gender = 'male'
+    ExperimentTime = 'night'
+
     a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang/',
-                 name="video_info.xlsx", column="gender", element="male")
+                 name="video_info.xlsx", column='roundTime', element=1)
 
-    B = choose_data(a, column='roundTime', element=1)
-    A = choose_data(B, column='ExperimentTime', element='night')
+    B = choose_data(a, column="gender", element=gender)
+    A = choose_data(B, column='ExperimentTime', element=ExperimentTime)
 
-    # 多条件筛选
-    x = choose_data(A, column='split_number', element=5)  # split_number=1 not have ''
-    df_day = pd.DataFrame(x, columns=["Unique_serial_number"])
-    # data = df_day.values.tolist()
-    csv_FD = []
-    for item in tqdm(df_day['Unique_serial_number']):
-        csv_result3 = search_csv(
-            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
-            name="rec-{}-G1-2022114230_Feature_Space".format(item))
-        csv_FD.append(csv_result3[0])
+    C = choose_data(a, column="gender", element='female')
+    D = choose_data(C, column='ExperimentTime', element=ExperimentTime)
 
-    y = choose_data(A, column='split_number', element=5)  # split_number=1 not have ''
-    df_night = pd.DataFrame(y, columns=["Unique_serial_number"])
-    # data = df_night.values.tolist()
-    csv_FN = []
-    for item in tqdm(df_night['Unique_serial_number']):
-        csv_result4 = search_csv(
-            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
-            name="rec-{}-G1-2022114230_Feature_Space".format(item))
-        csv_FN.append(csv_result4[0])
+    for time_state in range(1, 7):
+        # 多条件筛选
+        x = choose_data(A, column='split_number', element=time_state)  # split_number=1 not have ''
+        df_day = pd.DataFrame(x, columns=["Unique_serial_number"])
+        # data = df_day.values.tolist()
+        csv_FD = []
+        for item in tqdm(df_day['Unique_serial_number']):
+            csv_result3 = search_csv(
+                path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
+                name="rec-{}-G1-2022114230_Feature_Space".format(item))
+            csv_FD.append(csv_result3[0])
 
-    Male_data = []
-    for i in range(0, 6):
-        single_data = data_combine(csv_FD[i], 0, 17998)
-        Male_data.append(single_data)
-    # single_data = data_combine(file_list_1[0], 0, 25)
-    # Male_data.append(single_data)
+        y = choose_data(D, column='split_number', element=time_state)  # split_number=1 not have ''
+        df_night = pd.DataFrame(y, columns=["Unique_serial_number"])
+        # data = df_night.values.tolist()
+        csv_FN = []
+        for item in tqdm(df_night['Unique_serial_number']):
+            csv_result4 = search_csv(
+                path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
+                name="rec-{}-G1-2022114230_Feature_Space".format(item))
+            csv_FN.append(csv_result4[0])
 
-    Female_data = []
-    for i in range(0, 6):
-        single_data = data_combine(csv_FN[i], 0, 17998)
-        # print('第{}个文件sucess'.format(i))
-        Female_data.append(single_data)
-    #
-    # # plt.figure(figsize=(5, 1), dpi=300)
-    # fig, ax = plt.subplot()
-    fig = plt.figure(figsize=(5, 3), dpi=300)
-    ax = fig.add_subplot(111)
-    for j in range(len(Male_data)):
-        for i in range(len(Male_data[0])):
-            plt.broken_barh(Male_data[j][i], (j, 0.8), facecolors=color_list[i])
-            plt.broken_barh(Female_data[j][i], (j + 6, 0.8), facecolors=color_list[i])
+        Male_data = []
+        for i in range(0, 6):
+            single_data = data_combine(csv_FD[i], 0, 17998)
+            Male_data.append(single_data)
+        # single_data = data_combine(file_list_1[0], 0, 25)
+        # Male_data.append(single_data)
 
-    # for i in range(len(Female_data[6])):
-    #     plt.broken_barh(Female_data[6][i], (12, 0.8), facecolors=color_list[i])
+        Female_data = []
+        for i in range(0, 6):
+            single_data = data_combine(csv_FN[i], 0, 17998)
+            # print('第{}个文件sucess'.format(i))
+            Female_data.append(single_data)
+        #
+        # # plt.figure(figsize=(5, 1), dpi=300)
+        # fig, ax = plt.subplot()
+        if time_state == 1:
+            time_ticks = ['{}0'.format(time_state - 1), '{}5'.format(time_state - 1), '{}0'.format(time_state)]
+        else:
+            time_ticks = ['{}1'.format(time_state - 1), '{}5'.format(time_state - 1), '{}0'.format(time_state)]
 
-    # plt.axhline(y=5.9, linewidth=1.5, color='black', linestyle='--')
-    # plt.yticks([3, 9], ['Males', 'Females'], fontsize=12)
-    plt.xticks([0, 9000, 18000], ['50', '55', '60'], fontsize=12)
-    plt.yticks([])
-    plt.tight_layout()
-    # plt.axis('off')
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    for axis in ['top', 'bottom', 'left', 'right']:
-        ax.spines[axis].set_linewidth(1.5)
-    # plt.ion()
-    plt.show()
+        fig = plt.figure(figsize=(5, 3), dpi=300)
+        ax = fig.add_subplot(111)
+        for j in range(len(Male_data)):
+            for i in range(len(Male_data[0])):
+                plt.broken_barh(Male_data[j][i], (j, 0.8), facecolors=color_list[i])
+                plt.broken_barh(Female_data[j][i], (j + 6, 0.8), facecolors=color_list[i])
+
+        # for i in range(len(Female_data[6])):
+        #     plt.broken_barh(Female_data[6][i], (12, 0.8), facecolors=color_list[i])
+
+        plt.axhline(y=5.9, linewidth=1.5, color='black', linestyle='--')
+        # plt.yticks([3, 9], ['Males', 'Females'], fontsize=12)
+        # plt.xticks([0, 9000, 18000], ['50', '55', '60'], fontsize=12)
+        plt.xticks([0, 9000, 18000], time_ticks, fontsize=12)
+        plt.yticks([])
+        plt.tight_layout()
+        # plt.axis('off')
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        for axis in ['top', 'bottom', 'left', 'right']:
+            ax.spines[axis].set_linewidth(1.5)
+        # plt.ion()
+        plt.show()
+        plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/state_space/fang_figure'
+                    '/{}_female_{}_{}0~{}0.tiff'.format(gender, ExperimentTime, time_state - 1, time_state), dpi=300)
+        plt.close()
