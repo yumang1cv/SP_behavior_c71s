@@ -386,9 +386,9 @@ def rename_label(file_path):
 
 if __name__ == '__main__':
     # file_list = open_data(
-    #     'D:/3D_behavior/Spontaneous_behavior/result_fang/results3/BeAMapping-replace/',
+    #     'D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace_inf/',
     #     'Feature_Space.csv')
-    file_list = open_data('D:/3D_behavior/Spontaneous_behavior/result_fang/results3/BeAMapping-replace/',
+    file_list = open_data('D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace_inf/',
                           'Movement_Labels.csv')
     # file_list = sorted(file_list, key=int)   # sort file use num
     for i in tqdm(range(0, len(file_list))):
