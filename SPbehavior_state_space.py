@@ -271,6 +271,6 @@ if __name__ == '__main__':
             ax.spines[axis].set_linewidth(1.5)
         # plt.ion()
         plt.show()
-        plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/state_space/fang_figure'
-                    '/{}_female_{}_{}0~{}0.tiff'.format(gender, ExperimentTime, time_state - 1, time_state), dpi=300)
-        plt.close()
+        # plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/state_space/fang_figure'
+        #             '/{}_female_{}_{}0~{}0.tiff'.format(gender, ExperimentTime, time_state - 1, time_state), dpi=300)
+        # plt.close()

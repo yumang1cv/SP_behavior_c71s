@@ -233,9 +233,9 @@ if __name__ == '__main__':
     # plt.tight_layout()
     # plt.show()
 
-    file_path = 'D:/3D_behavior/Spontaneous_behavior/result/analysis_result/state_convert/v2/behavior_freline/{}{' \
-                '}_5min.csv'.format(gender, ExperimentTime)
-    output_data1.to_csv(file_path)
+    # file_path = 'D:/3D_behavior/Spontaneous_behavior/result/analysis_result/state_convert/v2/behavior_freline/{}{' \
+    #             '}_5min.csv'.format(gender, ExperimentTime)
+    # output_data1.to_csv(file_path)
 
     """
     一个状态单只老鼠的数据

@@ -367,10 +367,13 @@ if __name__ == '__main__':
     """
     # delay_time = 10
     # ExperimentTime = 'night'
-    # gender = 'female'
+    # gender = 'male'
     # # Round = 1
+    # # a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
+    # #              name="video_info.xlsx", column='roundTime', element=1)
+    # # type = 'inf'
     # a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
-    #              name="video_info.xlsx", column='roundTime', element=1)
+    #              name="video_info.xlsx", column='type', element='inf')
     # # 多条件筛选
     # all_time_list = []
     # b = choose_data(a, column='ExperimentTime', element=ExperimentTime)
@@ -382,10 +385,11 @@ if __name__ == '__main__':
     #     # data = df_day.values.tolist()
     #     csv_FD = []
     #     for item in tqdm(df_day['Unique_serial_number']):
-    #         csv_result3 = search_csv(
-    #             path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
-    #             name="rec-{}-G1-2022114230_Movement_Labels".format(item))
-    #         csv_FD.append(csv_result3[0])
+    #         if item > 450:
+    #             csv_result3 = search_csv(
+    #                 path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
+    #                 name="rec-{}-G1-2022114230_Movement_Labels".format(item))
+    #             csv_FD.append(csv_result3[0])
     #
     #     ten_min_list = single_minute_fre(csv_FD, delay_time)
     #     print('前{}0分钟已处理结束'.format(i))
@@ -398,8 +402,48 @@ if __name__ == '__main__':
     # list_all = np.array(list_all)
     # list_all = normalize_2d(list_all)
     # list_all = pd.DataFrame(list_all)
-    # # list_all.to_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline'
-    # #                 '/fang_data/{}-{}_round1_{}min.csv'.format(gender, ExperimentTime, delay_time))
+    # list_all.to_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline'
+    #                 '/fang_data/{}-{}_round1_{}min_inf.csv'.format(gender, ExperimentTime, delay_time))
+
+    delay_time = 2
+    ExperimentTime = 'night'
+    gender = 'female'
+    # Round = 1
+    # a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
+    #              name="video_info.xlsx", column='roundTime', element=1)
+    # type = 'inf'
+    a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
+                 name="video_info.xlsx", column='ExperimentTime', element=ExperimentTime)
+    # 多条件筛选
+    all_time_list = []
+    # b = choose_data(a, column='ExperimentTime', element=ExperimentTime)
+    c = choose_data(a, column='gender', element=gender)
+    for i in range(1, 7, 1):
+        x = choose_data(c, column='split_number', element=i)
+        # y = choose_data(x, column='roundTime', element=Round)
+        df_day = pd.DataFrame(x, columns=["Unique_serial_number"])
+        # data = df_day.values.tolist()
+        csv_FD = []
+        for item in tqdm(df_day['Unique_serial_number']):
+            if item < 433:
+                csv_result3 = search_csv(
+                    path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
+                    name="rec-{}-G1-2022114230_Movement_Labels".format(item))
+                csv_FD.append(csv_result3[0])
+
+        ten_min_list = single_minute_fre(csv_FD, delay_time)
+        print('前{}0分钟已处理结束'.format(i))
+        all_time_list.append(ten_min_list)
+
+    list_all = all_time_list
+    list_all = list(np.ravel(list_all))
+    list_all = np.array_split(list_all, len(list_all) / 14)
+    list_all = pd.DataFrame(list_all)
+    list_all = np.array(list_all)
+    list_all = normalize_2d(list_all)
+    list_all = pd.DataFrame(list_all)
+    list_all.to_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline'
+                    '/fang_data/{}-{}_round1_{}min.csv'.format(gender, ExperimentTime, delay_time))
 
     """
         test code

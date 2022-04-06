@@ -389,8 +389,8 @@ if __name__ == '__main__':
         # plt.savefig("D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/2500_cell"
         #             "/{}_{}_{}_v2.tiff".format(gender, ExperimentTime, time_state), dpi=300, transparent=True)
 
-        plt.savefig("D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/2500_cell"
-                    "/{}_{}_v1.tiff".format(ExperimentTime, time_state), dpi=300, transparent=True)
-        plt.close(fig)
+        # plt.savefig("D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/2500_cell"
+        #             "/{}_{}_v1.tiff".format(ExperimentTime, time_state), dpi=300, transparent=True)
+        # plt.close(fig)
 
 

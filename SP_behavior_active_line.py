@@ -6,7 +6,7 @@ import seaborn as sns
 import matplotlib
 
 matplotlib.use('Qt5Agg')
-delay = 2
+delay = 10
 
 male_day = pd.read_csv(r'D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline/fang_data'
                        r'/male-day_round1_{}min.csv'.format(delay))
@@ -150,38 +150,37 @@ plt.xlabel('Time (min)', fontsize=15)
 plt.ylabel('Fraction', fontsize=15)
 plt.tight_layout()
 plt.show()
-plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline/fang_data'
-            '/figure/active_line_{}min.tiff'.format(delay), dpi=300)
-plt.close()
+# plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline/fang_data'
+#             '/figure/active_line_{}min.tiff'.format(delay), dpi=300)
+# plt.close()
 #
 """
     fit data plot
 """
-# fig, ax = plt.subplots(figsize=(8, 8), dpi=300)
-# ax = fig.add_subplot(111)
-
-ax = sns.lmplot(data=data, x="time", y="mean", hue="species", palette=violon_color,
-                height=7, aspect=1.4, legend=False)
-# ax = sns.lmplot(data=data, x="time", y="mean", hue="species", palette=violon_color)
-ax.set_axis_labels("Time (min)", "Fraction", fontsize=20)
-# ax.fig.set_figwidth(8)
-# ax.fig.set_figheight(5)
-# sns.set(rc={'figure.figsize': (8, 8)})
-"""
-    下面2行一块使用
-"""
-ax.set(xticks=np.arange(0, 60, 5), yticks=np.arange(-0.3, 0.5, 0.1))
-ax.set_xticklabels(np.arange(0, 60, 5), rotation=0, size=15)
-# ax.set(xticks=np.arange(delay, 60+delay, delay*5))
-# ax.set_xticklabels(np.arange(delay, 60+delay, delay*5), rotation=0, size=15)
-
-# ax.set_yticklabels(np.arange(-1, 1.6, 0.5), rotation=0, size=15)
-# ax.set_xticklabels(np.arange(0, 61, 10), size=15)
-ax.set_yticklabels(size=15)
-plt.legend(bbox_to_anchor=(1, 0), loc=3, borderaxespad=0, fontsize=18, frameon=False)
-ax.tight_layout()
-plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline/fang_data'
-            '/figure/active_fitline_{}min.tiff'.format(delay), dpi=300)
+# # fig, ax = plt.subplots(figsize=(8, 8), dpi=300)
+# # ax = fig.add_subplot(111)
+# ax = sns.lmplot(data=data, x="time", y="mean", hue="species", palette=violon_color,
+#                 height=7, aspect=1.4, legend=False)
+# # ax = sns.lmplot(data=data, x="time", y="mean", hue="species", palette=violon_color)
+# ax.set_axis_labels("Time (min)", "Fraction", fontsize=20)
+# # ax.fig.set_figwidth(8)
+# # ax.fig.set_figheight(5)
+# # sns.set(rc={'figure.figsize': (8, 8)})
+# """
+#     下面2行一块使用
+# """
+# ax.set(xticks=np.arange(0, 60, 5), yticks=np.arange(-0.3, 0.5, 0.1))
+# ax.set_xticklabels(np.arange(0, 60, 5), rotation=0, size=15)
+# # ax.set(xticks=np.arange(delay, 60+delay, delay*5))
+# # ax.set_xticklabels(np.arange(delay, 60+delay, delay*5), rotation=0, size=15)
+#
+# # ax.set_yticklabels(np.arange(-1, 1.6, 0.5), rotation=0, size=15)
+# # ax.set_xticklabels(np.arange(0, 61, 10), size=15)
+# ax.set_yticklabels(size=15)
+# plt.legend(bbox_to_anchor=(1, 0), loc=3, borderaxespad=0, fontsize=18, frameon=False)
+# ax.tight_layout()
+# # plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/behavior_freline/fang_data'
+# #             '/figure/active_fitline_{}min.tiff'.format(delay), dpi=300)
 
 
 
