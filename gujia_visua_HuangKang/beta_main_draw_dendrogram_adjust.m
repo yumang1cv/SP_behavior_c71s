@@ -2,7 +2,7 @@
 genPath = genpath('D:/3D_behavior/Spontaneous_behavior/code/gujia_visua_HuangKang');
 addpath(genPath)
 
-working_path = 'E:/Analysis_video/Arousal_data/results';
+working_path = 'D:/3D_behavior/Spontaneous_behavior/result_fang/results3';
 
 nfeatures = 16;
 selection = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14];

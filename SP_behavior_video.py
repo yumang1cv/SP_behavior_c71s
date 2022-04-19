@@ -13,12 +13,14 @@
 # from matplotlib.animation import FuncAnimation
 # from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 # import seaborn as sns
+#
 # matplotlib.use('Qt5Agg')
 #
 # zuobiao = pd.read_csv('D:/3D_behavior/looming_behavior/looming_video_zhizuo/rec-1-M-20211110105228_Cali_Data3d.csv')
 #
 # df = zuobiao
 # df1 = np.transpose(df[0:len(df)])
+#
 #
 # def get_data(dataframe, fps_num):
 #     for i in range(0, 47, 3):
@@ -122,16 +124,16 @@
 #         # ax.axes.get_yaxis().set_visible(False)
 #         plt.rcParams['figure.figsize'] = (5, 5)  # 2.24, 2.24 设置figure_size尺寸
 #         plt.show()
-#         plt.savefig('D:/3D_behavior/looming_behavior/looming_video_zhizuo/figure/{}.png'.format(fps), dpi=300)
+#         plt.savefig('D:/3D_behavior/looming_behavior/looming_video_zhizuo/figure/{}.png'.format(fps), dpi=300,
+#                     bbox_inches='tight')
 #         plt.close()
-
 
 import numpy as np
 import cv2
 
-size = (1500, 1500)  # 这个是图片的尺寸，一定要和要用的图片size一致
+size = (1215, 1215)  # 这个是图片的尺寸，一定要和要用的图片size一致
 # 完成写入对象的创建，第一个参数是合成之后的视频的名称，第二个参数是可以使用的编码器，第三个参数是帧率即每秒钟展示多少张图片，第四个参数是图片大小信息
-videowrite = cv2.VideoWriter(r'D:/3D_behavior/looming_behavior/looming_video_zhizuo/test.mp4', -1, 30, size)  # 20是帧数，size是图片尺寸
+videowrite = cv2.VideoWriter(r'D:/3D_behavior/looming_behavior/looming_video_zhizuo/test_v2.mp4', -1, 30, size)  # 20是帧数，size是图片尺寸
 img_array = []
 for filename in [r'D:/3D_behavior/looming_behavior/looming_video_zhizuo/figure/{0}.png'.format(i) for i in range(19885, 20410)]:  # 这个循环是为了读取所有要用的图片文件
     img = cv2.imread(filename)
