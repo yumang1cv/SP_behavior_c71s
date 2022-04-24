@@ -3,7 +3,7 @@
 import os
 
 # path = "D:/3D_behavior/Spontaneous_behavior/result/BeAMapping-Final/BeAMapping_replace/"
-path = 'D:/3D_behavior/Spontaneous_behavior/result_fang/Calibrated_3DSkeleton_replace/'
+path = 'D:/3D_behavior/Spontaneous_behavior/result_fang/inf_add_results/3Dskeleton/Calibrated_3DSkeleton_replace/'
 # path = "D:/3D_behavior/Spontaneous_behavior/result/BeAMapping-Final/"
 # we shall store all the file names in this list
 filelist = []

@@ -1,12 +1,12 @@
 # -*- coding:utf-8 -*-
-# @FileName  :shang_value_cali_shank3.py
-# @Time      :2022/4/19 16:06
+# @FileName  :SP_behavior_shang.py
+# @Time      :2022/4/19 16:51
 # @Author    :XuYang
-
 import numpy as np
 import pandas as pd
 import os
 from sklearn.decomposition import PCA
+from tqdm import tqdm
 
 color_list = ['#845EC2', '#B39CD0', '#D65DB1', '#4FFBDF', '#FFC75F',
               '#D5CABD', '#B0A8B9', '#FF6F91', '#F9F871', '#D7E8F0',
@@ -107,56 +107,44 @@ def pre_looming_data(file_path, dataframe, state=""):
 
 
 if __name__ == '__main__':
+
+    ExperimentTime = 'night'
     gender = 'male'
-    group = 'HE'
-    a = read_csv(path=r'E:/Shank3B-square-SP-Looming-result/',
-                 name="Sp_info_all.xlsx", column='sex', element=gender)  # Male
+    a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
+                 name="video_info.xlsx", column="type", element='RGB')
 
-    A = choose_data(a, column='group', element=group)
-
-    file_list_1 = []
-    for item in A['filename'][1:len(A['filename'])]:
-        # item = item.replace("-camera-0", "")
-        file_list1 = search_csv(
-            path=r"E:/Shank3B-square-SP-Looming-result/BeAMapping_Sp_All/",
-            name="{}_Movement_Labels".format(item))
-        file_list_1.append(file_list1)
-    file_list_1 = list(np.ravel(file_list_1))
-
-    b = read_csv(path=r'E:/Shank3B-square-SP-Looming-result/',
-                 name="Sp_info_all.xlsx", column='sex', element='female')  # Female
-
-    B = choose_data(b, column='group', element=group)
-
-    file_list_2 = []
-    for item in B['filename'][0:len(B['filename'])]:
-        # item = item.replace("-camera-0", "")
-        file_list1 = search_csv(
-            path=r"E:/Shank3B-square-SP-Looming-result/BeAMapping_Sp_All/",
-            name="{}_Movement_Labels".format(item))
-        file_list_2.append(file_list1)
-    file_list_2 = list(np.ravel(file_list_2))
+    # 多条件筛选
+    x = choose_data(a, column='gender', element=gender)
+    y = choose_data(x, column='ExperimentTime', element=ExperimentTime)
 
     male_all = []
-    female_all = []
-    for i in range(0, 60, 10):
-        Male_list = pre_data(file_list_1, i, i + 10)
-        Female_list = pre_data(file_list_2, i, i + 10)
-        male_all.append(Male_list)
-        female_all.append(Female_list)
-        # Male_list = pre_looming_data(file_list_1, a, state="looming_time1")
-        # Female_list = pre_looming_data(file_list_2, b, state="looming_time1")
-        print("Male data:", Male_list)
-        print("Female data:", Female_list)
+    for state in range(1, 7):
+        z = choose_data(y, column='split_number', element=state)
+        df_day = pd.DataFrame(z, columns=["Unique_serial_number"])
+        # data = df_day.values.tolist()
+        file_list_1 = []
+        for item in tqdm(df_day['Unique_serial_number']):
+            csv_result3 = search_csv(
+                path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
+                name="rec-{}-G1-2022114230_Movement_Labels".format(item))
+            file_list_1.append(csv_result3[0])
+
+        # female_all = []
+        Male_list1 = pre_data(file_list_1, 0, 0 + 5)
+        # Female_list = pre_data(file_list_2, i, i + 5)
+        male_all.append(Male_list1)
+
+        Male_list2 = pre_data(file_list_1, 5, 5 + 5)
+        # Female_list = pre_data(file_list_2, i, i + 5)
+        male_all.append(Male_list2)
+
+        print("Male data0~5:", Male_list1)
+        print("Male data5~10:", Male_list2)
+        # print("Female data:", Female_list)
 
     male_all = pd.DataFrame(male_all)
-    female_all = pd.DataFrame(female_all)
-
-    male_all.to_excel('E:/Shank3B-square-SP-Looming-result/{}_{}.xlsx'.format(gender, group))
-    female_all.to_excel('E:/Shank3B-square-SP-Looming-result/female_{}.xlsx'.format(group))
-
-
-
+    male_all.to_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/shang_value/'
+                    'fang/{}_{}_5min.csv'.format(gender, ExperimentTime))
 
     # fre = 1
     # start = 20 * 60 * 30
