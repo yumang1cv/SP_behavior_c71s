@@ -108,9 +108,54 @@ def pre_looming_data(file_path, dataframe, state=""):
 
 if __name__ == '__main__':
 
+    """
+        fang data
+    """
+    # ExperimentTime = 'night'
+    # gender = 'male'
+    # a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
+    #              name="video_info.xlsx", column="type", element='RGB')
+    #
+    # # 多条件筛选
+    # x = choose_data(a, column='gender', element=gender)
+    # y = choose_data(x, column='ExperimentTime', element=ExperimentTime)
+    #
+    # male_all = []
+    # for state in range(1, 7):
+    #     z = choose_data(y, column='split_number', element=state)
+    #     df_day = pd.DataFrame(z, columns=["Unique_serial_number"])
+    #     # data = df_day.values.tolist()
+    #     file_list_1 = []
+    #     for item in tqdm(df_day['Unique_serial_number']):
+    #         csv_result3 = search_csv(
+    #             path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
+    #             name="rec-{}-G1-2022114230_Movement_Labels".format(item))
+    #         file_list_1.append(csv_result3[0])
+    #
+    #     # female_all = []
+    #     Male_list1 = pre_data(file_list_1, 0, 0 + 5)
+    #     # Female_list = pre_data(file_list_2, i, i + 5)
+    #     male_all.append(Male_list1)
+    #
+    #     Male_list2 = pre_data(file_list_1, 5, 5 + 5)
+    #     # Female_list = pre_data(file_list_2, i, i + 5)
+    #     male_all.append(Male_list2)
+    #
+    #     print("Male data0~5:", Male_list1)
+    #     print("Male data5~10:", Male_list2)
+    #     # print("Female data:", Female_list)
+    #
+    # male_all = pd.DataFrame(male_all)
+    # male_all.to_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/shang_value/'
+    #                 'fang/{}_{}_5min.csv'.format(gender, ExperimentTime))
+
+
+    """
+        yuan data
+    """
     ExperimentTime = 'night'
-    gender = 'male'
-    a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
+    gender = 'female'
+    a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_circle',
                  name="video_info.xlsx", column="type", element='RGB')
 
     # 多条件筛选
@@ -125,8 +170,8 @@ if __name__ == '__main__':
         file_list_1 = []
         for item in tqdm(df_day['Unique_serial_number']):
             csv_result3 = search_csv(
-                path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
-                name="rec-{}-G1-2022114230_Movement_Labels".format(item))
+                path=r"D:/3D_behavior/Spontaneous_behavior/result_circle/BeAMapping-Final/BeAMapping_replace",
+                name="rec-{}-G1-2021114230_Movement_Labels".format(item))
             file_list_1.append(csv_result3[0])
 
         # female_all = []
@@ -138,14 +183,13 @@ if __name__ == '__main__':
         # Female_list = pre_data(file_list_2, i, i + 5)
         male_all.append(Male_list2)
 
-        print("Male data0~5:", Male_list1)
-        print("Male data5~10:", Male_list2)
+        print("Male data{}~{}:".format((state-1)*5, (state)*5), Male_list1)
+        print("Male data{}~{}:".format((state)*5, (state+1)*5), Male_list2)
         # print("Female data:", Female_list)
 
     male_all = pd.DataFrame(male_all)
     male_all.to_csv('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/shang_value/'
-                    'fang/{}_{}_5min.csv'.format(gender, ExperimentTime))
-
+                    'yuan/{}_{}_5min.csv'.format(gender, ExperimentTime))
     # fre = 1
     # start = 20 * 60 * 30
     # end = 25 * 60 * 30
