@@ -417,17 +417,17 @@
 
 
 """
-    fang-Spontaneous Shank3B KO&WT Behavior Class Combine 0428NEW -LJJ
+    fang-Spontaneous Shank3B KO&WT Behavior Class Combine 0428NEW
     1、Flight:[23,22]              2、Running:[1,31,32]                    3、Trotting:[2,16]
     4、Walking:[11, 15, 29]        5、Stepping:[25,37]            6、Left turning:[7,8,17,24,30] 
     7、Right turning:[12,20,21]      8、Sniffing:[6,18,28,38]    9、Grooming:[9,10,19,27] 
     10、Rearing:[33]                         11、Hunching:[3,26,36]
-    12、Rising:[14,34,40]                           13、Climbing up:[4,39] 
-    14、Pause:[5,13,35]   
+    12、Rising:[14,34,35,40]                           13、Climbing up:[4,39] 
+    14、Pause:[5,13]   
 """
 # class_label_dict = {1: [23,22] , 2: [1,31,32], 3: [2,16], 4: [11, 15, 29]  , 5: [25,37], 6: [7,8,17,24,30],
 #                     7: [12,20,21], 8: [6,18,28,38], 9: [9,10,19,27], 10: [33]  , 11: [3,26,36],
-#                     12: [14,34,40] , 13: [4,39],14:[5,13,35]}
+#                     12: [14,34,35,40] , 13: [4,39],14:[5,13]}
 #
 # new_dict = {}
 # for index, key in enumerate(class_label_dict):
@@ -451,9 +451,10 @@ from tqdm import tqdm
 #                     23: 'Rearing/Diving', 13: 'Rearing/Diving', 38: 'Sniffing and Walking'}
 
 
-class_label_dict = {23: 1, 22: 1, 1: 2, 31: 2, 32: 2, 2: 3, 16: 3, 11: 4, 15: 4, 29: 4, 25: 5, 37: 5, 7: 6, 8: 6,
-                    17: 6, 24: 6, 30: 6, 12: 7, 20: 7, 21: 7, 6: 8, 18: 8, 28: 8, 38: 8, 9: 9, 10: 9, 19: 9,
-                    27: 9, 33: 10, 3: 11, 26: 11, 36: 11, 14: 12, 34: 12, 40: 12, 4: 13, 39: 13, 5: 14, 13: 14, 35: 14}
+class_label_dict = {23: 1, 22: 1, 1: 2, 31: 2, 32: 2, 2: 3, 16: 3, 11: 4, 15: 4, 29: 4, 25: 5, 37: 5,
+                    7: 6, 8: 6, 17: 6, 24: 6, 30: 6, 12: 7, 20: 7, 21: 7, 6: 8, 18: 8, 28: 8, 38: 8,
+                    9: 9, 10: 9, 19: 9, 27: 9, 33: 10, 3: 11, 26: 11, 36: 11, 14: 12, 34: 12, 35: 12,
+                    40: 12, 4: 13, 39: 13, 5: 14, 13: 14}
 
 
 def open_data(data_path, file_type):
@@ -476,9 +477,9 @@ def rename_label(file_path):
 
 if __name__ == '__main__':
     # file_list = open_data(
-    #     'E:/Shank3B-square-SP-Looming-result/Sp-Looming-kowt/Result/BeAMapping_replace/',
+    #     'E:/Shank3B-square-SP-Looming-result/Supplement/BeAMapping_replace/',
     #     'Feature_Space.csv')
-    file_list = open_data('E:/Shank3B-square-SP-Looming-result/Sp-Looming-kowt/Result/BeAMapping_replace/',
+    file_list = open_data('E:/Shank3B-square-SP-Looming-result/Supplement/BeAMapping_replace/',
                           'Movement_Labels.csv')
     # file_list = sorted(file_list, key=int)   # sort file use num
     for i in tqdm(range(0, len(file_list))):
