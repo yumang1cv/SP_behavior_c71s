@@ -108,23 +108,23 @@ def pre_looming_data(file_path, dataframe, state=""):
 
 if __name__ == '__main__':
     gender = 'male'
-    group = 'HE'
+    group = 'KO'
     a = read_csv(path=r'E:/Shank3B-square-SP-Looming-result/',
-                 name="Sp_info_all.xlsx", column='sex', element=gender)  # Male
+                 name="Sp_info_all_V2.xlsx", column='sex', element=gender)  # Male
 
     A = choose_data(a, column='group', element=group)
 
     file_list_1 = []
-    for item in A['filename'][1:len(A['filename'])]:
+    for item in A['filename'][0:len(A['filename'])]:
         # item = item.replace("-camera-0", "")
         file_list1 = search_csv(
-            path=r"E:/Shank3B-square-SP-Looming-result/BeAMapping_Sp_All/",
+            path=r"E:/Shank3B-square-SP-Looming-result/BeAMapping_Spontaneous/Sp_All/",
             name="{}_Movement_Labels".format(item))
         file_list_1.append(file_list1)
     file_list_1 = list(np.ravel(file_list_1))
 
     b = read_csv(path=r'E:/Shank3B-square-SP-Looming-result/',
-                 name="Sp_info_all.xlsx", column='sex', element='female')  # Female
+                 name="Sp_info_all_V2.xlsx", column='sex', element='female')  # Female
 
     B = choose_data(b, column='group', element=group)
 
@@ -132,31 +132,30 @@ if __name__ == '__main__':
     for item in B['filename'][0:len(B['filename'])]:
         # item = item.replace("-camera-0", "")
         file_list1 = search_csv(
-            path=r"E:/Shank3B-square-SP-Looming-result/BeAMapping_Sp_All/",
+            path=r"E:/Shank3B-square-SP-Looming-result/BeAMapping_Spontaneous/Sp_All/",
             name="{}_Movement_Labels".format(item))
         file_list_2.append(file_list1)
     file_list_2 = list(np.ravel(file_list_2))
 
+    delay_time = 10
     male_all = []
     female_all = []
-    for i in range(0, 60, 10):
-        Male_list = pre_data(file_list_1, i, i + 10)
-        Female_list = pre_data(file_list_2, i, i + 10)
+    for i in range(0, 60, delay_time):
+        Male_list = pre_data(file_list_1, i, i + delay_time)
+        Female_list = pre_data(file_list_2, i, i + delay_time)
         male_all.append(Male_list)
         female_all.append(Female_list)
         # Male_list = pre_looming_data(file_list_1, a, state="looming_time1")
         # Female_list = pre_looming_data(file_list_2, b, state="looming_time1")
         print("Male data:", Male_list)
         print("Female data:", Female_list)
+        print('前{}分钟已计算'.format(i + delay_time))
 
     male_all = pd.DataFrame(male_all)
     female_all = pd.DataFrame(female_all)
 
-    male_all.to_excel('E:/Shank3B-square-SP-Looming-result/{}_{}.xlsx'.format(gender, group))
-    female_all.to_excel('E:/Shank3B-square-SP-Looming-result/female_{}.xlsx'.format(group))
-
-
-
+    male_all.to_excel('E:/Shank3B-square-SP-Looming-result/{}_{}_{}.xlsx'.format(gender, group, delay_time))
+    female_all.to_excel('E:/Shank3B-square-SP-Looming-result/female_{}_{}.xlsx'.format(group, delay_time))
 
     # fre = 1
     # start = 20 * 60 * 30
