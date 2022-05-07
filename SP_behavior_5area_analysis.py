@@ -233,22 +233,75 @@ def plot_figure(post_data):
 
 if __name__ == '__main__':
 
-    # a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
-    #              name="video_info.xlsx", column='roundTime', element=1)
-    # ExperimentTime = 'night'
-    # # gender = 'male'
-    #
-    # A = choose_data(a, column='ExperimentTime', element=ExperimentTime)
-    # # B = choose_data(A, column='gender', element=gender)
-    # # for time_state in range(1, 7):
-    # time_state = 6
-    # # 多条件筛选
-    # X = choose_data(A, column='split_number', element=time_state)  # split_number=1 not have ''
-    # df_day = pd.DataFrame(X, columns=["Unique_serial_number"])
+    """
+        behavior + trace plot
+    """
+    a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
+                 name="video_info.xlsx", column='roundTime', element=1)
+    ExperimentTime = 'night'
+    # gender = 'male'
+
+    A = choose_data(a, column='ExperimentTime', element=ExperimentTime)
+    # B = choose_data(A, column='gender', element=gender)
+    # for time_state in range(1, 7):
+    time_state = 6
+    # 多条件筛选
+    X = choose_data(A, column='split_number', element=time_state)  # split_number=1 not have ''
+
+    a = pd.read_excel('D:/3D_behavior/Spontaneous_behavior/result_fang/video_info.xlsx')
+
+    df_day = pd.DataFrame(a, columns=["Unique_serial_number"])
+    # data = df_day.values.tolist()
+
+    csv_FD = []
+    for item in tqdm(df_day['Unique_serial_number'][0:432]):
+        csv_result3 = search_csv(
+            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/back_coordinates_origin/",
+            name="rec-{}-G1-2022114230_Cali_Data3d_Replace".format(item))
+        csv_FD.append(csv_result3[0])
+
+    behavior_file = []
+    for item in tqdm(df_day['Unique_serial_number'][0:432]):
+        csv_result4 = search_csv(
+            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
+            name="rec-{}-G1-2022114230_Movement_Labels".format(item))
+        behavior_file.append(csv_result4[0])
+
+    for j in range(len(csv_FD)):
+        data = pd.read_csv(csv_FD[j])
+        behavior_label = pd.read_csv(behavior_file[j])
+        data['behavior_label'] = behavior_label.iloc[:, 1:2]
+        fig = plt.figure(figsize=(6, 6), dpi=300)
+        ax = fig.add_subplot(111)
+        # ax.plot(data['x'], data['y'], color='black')
+        ax.add_patch(Rectangle((-170, -170), 340, 340, color="lightgray", alpha=0.6))
+        ax = sns.scatterplot(data=data, x="x", y="y", hue='behavior_label', size=0.01,
+                             palette=behavior_color, alpha=0.7, legend=False)
+        color = 'black'
+        alpha_value = 0.7
+        line_value = 1.5
+        ax.plot([250, 250], [-250, 250], linewidth=line_value, color=color, alpha=alpha_value)
+        ax.plot([-250, -250], [-250, 250], linewidth=line_value, color=color, alpha=alpha_value)
+        ax.plot([-250, 250], [250, 250], linewidth=line_value, color=color, alpha=alpha_value)
+        ax.plot([-250, 250], [-250, -250], linewidth=line_value, color=color, alpha=alpha_value)
+        # ax.add_patch(Rectangle((-250, -250), 500, 500, color="lightgray", alpha=0.4))
+        plt.axis('off')
+        plt.show()
+        plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/inside_outside/add_behavior_34/'
+                    '{}.tiff'.format(j), dpi=300, transparent=True)
+        plt.close()
+
+
+    """
+        trace plot 
+        # color  aera1 : #a697c8    area2 : #a3d7e3    area3 : #c9e2a2   area4 : #fad69f   area5 : #f1a691
+    """
+    # a = pd.read_excel('D:/3D_behavior/Spontaneous_behavior/result_fang/video_info.xlsx')
+    # df_day = pd.DataFrame(a, columns=["Unique_serial_number"])
     # # data = df_day.values.tolist()
     #
     # csv_FD = []
-    # for item in tqdm(df_day['Unique_serial_number']):
+    # for item in tqdm(df_day['Unique_serial_number'][0:432]):
     #     csv_result3 = search_csv(
     #         path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/back_coordinates_origin/",
     #         name="rec-{}-G1-2022114230_Cali_Data3d_Replace".format(item))
@@ -260,11 +313,11 @@ if __name__ == '__main__':
     # #         path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
     # #         name="rec-{}-G1-2022114230_Movement_Labels".format(item))
     # #     behavior_file.append(csv_result4[0])
+    # # for j in range(1):
     # for j in range(len(csv_FD)):
     #     data = pd.read_csv(csv_FD[j])
     #     fig = plt.figure(figsize=(6, 6), dpi=300)
     #     ax = fig.add_subplot(111)
-    #     ax.plot(data['x'], data['y'], color='black')
     #     # ax = sns.scatterplot(data=data, x="x", y="y")
     #     color = 'black'
     #     alpha_value = 0.7
@@ -274,48 +327,18 @@ if __name__ == '__main__':
     #     # ax.plot([-250, 250], [250, 250], linewidth=line_value, color=color, alpha=alpha_value)
     #     # ax.plot([-250, 250], [-250, -250], linewidth=line_value, color=color, alpha=alpha_value)
     #     ax.add_patch(Rectangle((-250, -250), 500, 500, color="lightgray", alpha=0.4))
-    #     ax.add_patch(Rectangle((-125, -125), 250, 250, color="#c29799", alpha=0.4))
+    #     ax.add_patch(Rectangle((-170, -170), 340, 340, color="#c29799", alpha=0.4))
+    #
+    #     # ax.add_patch(Rectangle((-250, -250), 500, 500, color="#a697c8", alpha=1))
+    #     # ax.add_patch(Rectangle((-200, -200), 400, 400, color="#a3d7e3", alpha=1))
+    #     # ax.add_patch(Rectangle((-150, -150), 300, 300, color="#c9e2a2", alpha=1))
+    #     # ax.add_patch(Rectangle((-100, -100), 200, 200, color="#fad69f", alpha=1))
+    #     # ax.add_patch(Rectangle((-50, -50), 100, 100, color="#f1a691", alpha=1))
+    #
+    #     ax.plot(data['x'], data['y'], color='black')
     #     plt.axis('off')
     #     plt.show()
-    #     plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/inside_outside/trace/'
+    #     plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/inside_outside/trace_34/'
     #                 '{}.tiff'.format(j), dpi=300, transparent=True)
     #     plt.close()
 
-    a = pd.read_excel('D:/3D_behavior/Spontaneous_behavior/result_fang/video_info.xlsx')
-    df_day = pd.DataFrame(a, columns=["Unique_serial_number"])
-    # data = df_day.values.tolist()
-
-    csv_FD = []
-    for item in tqdm(df_day['Unique_serial_number'][0:432]):
-        csv_result3 = search_csv(
-            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/back_coordinates_origin/",
-            name="rec-{}-G1-2022114230_Cali_Data3d_Replace".format(item))
-        csv_FD.append(csv_result3[0])
-
-    # behavior_file = []
-    # for item in tqdm(df_day['Unique_serial_number']):
-    #     csv_result4 = search_csv(
-    #         path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
-    #         name="rec-{}-G1-2022114230_Movement_Labels".format(item))
-    #     behavior_file.append(csv_result4[0])
-
-    for j in range(len(csv_FD)):
-        data = pd.read_csv(csv_FD[j])
-        fig = plt.figure(figsize=(6, 6), dpi=300)
-        ax = fig.add_subplot(111)
-        ax.plot(data['x'], data['y'], color='black')
-        # ax = sns.scatterplot(data=data, x="x", y="y")
-        color = 'black'
-        alpha_value = 0.7
-        line_value = 0.7
-        # ax.plot([250, 250], [-250, 250], linewidth=line_value, color=color, alpha=alpha_value)
-        # ax.plot([-250, -250], [-250, 250], linewidth=line_value, color=color, alpha=alpha_value)
-        # ax.plot([-250, 250], [250, 250], linewidth=line_value, color=color, alpha=alpha_value)
-        # ax.plot([-250, 250], [-250, -250], linewidth=line_value, color=color, alpha=alpha_value)
-        ax.add_patch(Rectangle((-250, -250), 500, 500, color="lightgray", alpha=0.4))
-        ax.add_patch(Rectangle((-125, -125), 250, 250, color="#c29799", alpha=0.4))
-        plt.axis('off')
-        plt.show()
-        plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/inside_outside/trace/'
-                    '{}.tiff'.format(j), dpi=300, transparent=True)
-        plt.close()

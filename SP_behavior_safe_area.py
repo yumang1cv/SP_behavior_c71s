@@ -115,15 +115,128 @@ def normliza_data(data1, data_name=''):
 
 
 if __name__ == '__main__':
+    """
+        方形安全区域
+    """
+    # # file_path = []
+    # # path = r'D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/Calibrated_3DSkeleton'
+    # # for root, directories, file in os.walk(path):
+    # #     for file in file:
+    # #         if file.endswith(".csv"):
+    # #             # print(os.path.join(root, file))
+    # #             file_path.append(os.path.join(root, file))
+    #
+    # a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
+    #              name="video_info.xlsx", column='roundTime', element=1)
+    #
+    # A = choose_data(a, column='ExperimentTime', element='day')
+    # B = choose_data(A, column='gender', element='male')
+    # all_time = []
+    # angle_time_all = []
+    # circle_time_all = []
+    # for time_state in range(1, 7):
+    #     # time_state = 1
+    #     # 多条件筛选
+    #     X = choose_data(a, column='split_number', element=time_state)  # split_number=1 not have ''
+    #     df_day = pd.DataFrame(X, columns=["Unique_serial_number"])
+    #     # data = df_day.values.tolist()
+    #     csv_FD = []
+    #     for item in tqdm(df_day['Unique_serial_number']):
+    #         csv_result3 = search_csv(
+    #             path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/Calibrated_3DSkeleton_replace/",
+    #             name="rec-{}-G1-2022114230_Cali_Data3d".format(item))
+    #         csv_FD.append(csv_result3[0])
+    #
+    #     location_all = np.zeros((50, 50))
+    #     round_1_all = []
+    #     round_2_all = []
+    #     round_3_all = []
+    #     round_4_all = []
+    #     round_5_all = []
+    #     round_data_all = []
+    #
+    #     for j in range(0, len(csv_FD)):
+    #         # for j in range(0, 1):
+    #         data = pd.read_csv(csv_FD[j])
+    #
+    #         rotation_data = rotation(data)
+    #
+    #         rotation_data['back'] = normliza_data(rotation_data, data_name='back')
+    #         rotation_data['back.1'] = normliza_data(rotation_data, data_name='back.1')
+    #
+    #         data['back_new'] = rotation_data['back']
+    #         data['back.1_new'] = rotation_data['back.1']
+    #
+    #         # fig = plt.figure(figsize=(5, 5), dpi=300)
+    #         # ax = fig.add_subplot(111)
+    #         # plt.style.use('ggplot')
+    #         # ax = sns.scatterplot(data=rotation_data, x="back", y="back.1", alpha=0.7)
+    #
+    #         """
+    #             迭代统计safe area
+    #         """
+    #         for t in range(1, 26):
+    #             locals()['round_' + str(t)] = 0
+    #         # round_25 = 0
+    #
+    #         for i in range(len(rotation_data)):
+    #             for t in range(1, 26):
+    #                 # if (-1) * (t - 1) < np.abs(rotation_data['back'].iloc[i]) <= 1 * t and \
+    #                 #         (-1) * (t - 1) < np.abs(rotation_data['back.1'].iloc[i]) <= 1 * t:
+    #                 #     locals()['round_' + str(t)] = locals()['round_' + str(t)] + 1
+    #                 if -t < np.abs(rotation_data['back'].iloc[i]) <= t \
+    #                         and -25 < np.abs(rotation_data['back.1'].iloc[i]) <= t:
+    #                     # if -t * np.pi < np.abs(rotation_data['back'].iloc[i]) <= t * np.pi \
+    #                     #         and -25 * np.pi < np.abs(rotation_data['back.1'].iloc[i]) <= t * np.pi:
+    #                     # round_25 = round_25 + 1
+    #                     locals()['round_' + str(t)] = locals()['round_' + str(t)] + 1
+    #
+    #         for t in reversed(range(2, 26)):
+    #             # locals()['round_' + str(t)] = locals()['round_' + str(t)] - locals()['round_' + str(t - 1)]
+    #             locals()['round_' + str(t)] = (locals()['round_' + str(t)] - locals()['round_' + str(t - 1)]) / (
+    #                         99 - (25 - t) * 2)
+    #
+    #         # locals()['round_' + str(1)] = locals()['round_' + str(1)]/4
+    #         round_1 = round_1 / 4
+    #
+    #         round_data = []
+    #         for t in range(1, 26):
+    #             round_data.append(locals()['round_' + str(t)])
+    #
+    #         print(sum(round_data))
+    #         round_data_all.append(round_data)
+    #         print('第{}个文件已处理'.format(j))
+    #     all_time.append(round_data_all)
+    #
+    # time1 = np.array(all_time[0]).T
+    # time_all = time1
+    # for i in range(1, 5):
+    #     time_all = np.concatenate((time_all, np.array(all_time[i + 1]).T), axis=1)
+    #
+    # # 安全区域可视化代码
+    # # round_data_all = np.array(round_data_all).T
+    # # sns.heatmap(time_all)
+    # mean_data = []
+    # for i in range(len(time_all)):
+    #     mean_data.append(np.mean(time_all[i, :]) / 30 / 60)
+    # x = [i for i in range(1, 26)]
+    # fig, ax = plt.subplots(figsize=(6, 4), dpi=300)
+    # plt.plot(x, mean_data, color='#845EC2')
+    # ax.spines['right'].set_visible(False)
+    # ax.spines['top'].set_visible(False)
+    # plt.xlabel('Distance from center point(cm)', fontsize=13)
+    # plt.ylabel('Exploration duration(min)', fontsize=13)
+    # plt.tight_layout()
+    # plt.show()
+    # plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/'
+    #             'range_safe_area.tiff', dpi=300, transparent=True)
 
-    # file_path = []
-    # path = r'D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/Calibrated_3DSkeleton'
-    # for root, directories, file in os.walk(path):
-    #     for file in file:
-    #         if file.endswith(".csv"):
-    #             # print(os.path.join(root, file))
-    #             file_path.append(os.path.join(root, file))
+    # import statistics
+    # print(statistics.mean(all_time))
 
+    """
+        圆形安全区域
+    """
     a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
                  name="video_info.xlsx", column='roundTime', element=1)
 
@@ -154,7 +267,7 @@ if __name__ == '__main__':
         round_data_all = []
 
         for j in range(0, len(csv_FD)):
-        # for j in range(0, 1):
+            # for j in range(0, 1):
             data = pd.read_csv(csv_FD[j])
 
             rotation_data = rotation(data)
@@ -173,34 +286,30 @@ if __name__ == '__main__':
             """
                 迭代统计safe area
             """
-            for t in range(1, 26):
+            for t in range(1, 36):
                 locals()['round_' + str(t)] = 0
             # round_25 = 0
 
             for i in range(len(rotation_data)):
-                for t in range(1, 26):
-                    # if (-1) * (t - 1) < np.abs(rotation_data['back'].iloc[i]) <= 1 * t and \
-                    #         (-1) * (t - 1) < np.abs(rotation_data['back.1'].iloc[i]) <= 1 * t:
-                    #     locals()['round_' + str(t)] = locals()['round_' + str(t)] + 1
-                    if -t < np.abs(rotation_data['back'].iloc[i]) <= t \
-                            and -25 < np.abs(rotation_data['back.1'].iloc[i]) <= t:
-                        # round_25 = round_25 + 1
+                for t in range(1, 36):
+                    if np.square(rotation_data['back'].iloc[i]) + np.square(rotation_data['back.1'].iloc[i]) <= t * t:
                         locals()['round_' + str(t)] = locals()['round_' + str(t)] + 1
 
-            for t in reversed(range(2, 26)):
-                # locals()['round_' + str(t)] = locals()['round_' + str(t)] - locals()['round_' + str(t - 1)]
-                locals()['round_' + str(t)] = (locals()['round_' + str(t)] - locals()['round_' + str(t - 1)])/(99-(25-t)*2)
+            for t in reversed(range(2, 36)):
+                locals()['round_' + str(t)] = (locals()['round_' + str(t)] - locals()['round_' + str(t - 1)]) / (
+                        np.pi * ((t - 1) * 2 + 1))
 
-            # locals()['round_' + str(1)] = locals()['round_' + str(1)]/4
-            round_1 = round_1 / 4
+            round_1 = round_1 / (np.pi * 1)
 
             round_data = []
-            for t in range(1, 26):
+            for t in range(1, 36):
                 round_data.append(locals()['round_' + str(t)])
 
             print(sum(round_data))
+
             round_data_all.append(round_data)
             print('第{}个文件已处理'.format(j))
+
         all_time.append(round_data_all)
 
     time1 = np.array(all_time[0]).T
@@ -211,9 +320,10 @@ if __name__ == '__main__':
     # 安全区域可视化代码
     # round_data_all = np.array(round_data_all).T
     # sns.heatmap(time_all)
+
     mean_data = []
     for i in range(len(time_all)):
-        mean_data.append(np.mean(time_all[i, :])/30/60)
+        mean_data.append(np.mean(time_all[i, :]) / 30 / 60)
     x = [i for i in range(1, 26)]
     fig, ax = plt.subplots(figsize=(6, 4), dpi=300)
     plt.plot(x, mean_data, color='#845EC2')
@@ -223,8 +333,3 @@ if __name__ == '__main__':
     plt.ylabel('Exploration duration(min)', fontsize=13)
     plt.tight_layout()
     plt.show()
-    # plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/'
-    #             'range_safe_area.tiff', dpi=300, transparent=True)
-
-# import statistics
-# print(statistics.mean(all_time))
