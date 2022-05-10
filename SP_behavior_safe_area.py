@@ -237,8 +237,10 @@ if __name__ == '__main__':
     """
         圆形安全区域
     """
-    a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
-                 name="video_info.xlsx", column='roundTime', element=1)
+    # a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
+    #              name="video_info.xlsx", column='roundTime', element=1)
+
+    a = pd.read_excel('D:/3D_behavior/Spontaneous_behavior/result_fang/video_info.xlsx')
 
     A = choose_data(a, column='ExperimentTime', element='day')
     B = choose_data(A, column='gender', element='male')
@@ -248,11 +250,11 @@ if __name__ == '__main__':
     for time_state in range(1, 7):
         # time_state = 1
         # 多条件筛选
-        X = choose_data(a, column='split_number', element=time_state)  # split_number=1 not have ''
-        df_day = pd.DataFrame(X, columns=["Unique_serial_number"])
+        # X = choose_data(a, column='split_number', element=time_state)  # split_number=1 not have ''
+        df_day = pd.DataFrame(a, columns=["Unique_serial_number"])
         # data = df_day.values.tolist()
         csv_FD = []
-        for item in tqdm(df_day['Unique_serial_number']):
+        for item in tqdm(df_day['Unique_serial_number'][0:432]):
             csv_result3 = search_csv(
                 path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/Calibrated_3DSkeleton_replace/",
                 name="rec-{}-G1-2022114230_Cali_Data3d".format(item))
@@ -321,15 +323,20 @@ if __name__ == '__main__':
     # round_data_all = np.array(round_data_all).T
     # sns.heatmap(time_all)
 
+    # mean_data = []
+    # for i in range(len(time_all)):
+    #     mean_data.append(np.mean(time_all[i, :]) / 30 / 60)
     mean_data = []
-    for i in range(len(time_all)):
+    for i in range(25):
         mean_data.append(np.mean(time_all[i, :]) / 30 / 60)
     x = [i for i in range(1, 26)]
     fig, ax = plt.subplots(figsize=(6, 4), dpi=300)
-    plt.plot(x, mean_data, color='#845EC2')
+    plt.plot(x, mean_data, color='r', linewidth=7)
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
     plt.xlabel('Distance from center point(cm)', fontsize=13)
     plt.ylabel('Exploration duration(min)', fontsize=13)
     plt.tight_layout()
     plt.show()
+    plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/safe_area_range'
+                '/range_safe_area_yuan_v3.tiff', dpi=300, transparent=True)
