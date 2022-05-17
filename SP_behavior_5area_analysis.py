@@ -236,61 +236,60 @@ if __name__ == '__main__':
     """
         behavior + trace plot
     """
-    a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
-                 name="video_info.xlsx", column='roundTime', element=1)
-    ExperimentTime = 'night'
-    # gender = 'male'
-
-    A = choose_data(a, column='ExperimentTime', element=ExperimentTime)
-    # B = choose_data(A, column='gender', element=gender)
-    # for time_state in range(1, 7):
-    time_state = 6
-    # 多条件筛选
-    X = choose_data(A, column='split_number', element=time_state)  # split_number=1 not have ''
-
-    a = pd.read_excel('D:/3D_behavior/Spontaneous_behavior/result_fang/video_info.xlsx')
-
-    df_day = pd.DataFrame(a, columns=["Unique_serial_number"])
-    # data = df_day.values.tolist()
-
-    csv_FD = []
-    for item in tqdm(df_day['Unique_serial_number'][0:432]):
-        csv_result3 = search_csv(
-            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/back_coordinates_origin/",
-            name="rec-{}-G1-2022114230_Cali_Data3d_Replace".format(item))
-        csv_FD.append(csv_result3[0])
-
-    behavior_file = []
-    for item in tqdm(df_day['Unique_serial_number'][0:432]):
-        csv_result4 = search_csv(
-            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
-            name="rec-{}-G1-2022114230_Movement_Labels".format(item))
-        behavior_file.append(csv_result4[0])
-
-    for j in range(len(csv_FD)):
-        data = pd.read_csv(csv_FD[j])
-        behavior_label = pd.read_csv(behavior_file[j])
-        data['behavior_label'] = behavior_label.iloc[:, 1:2]
-        fig = plt.figure(figsize=(6, 6), dpi=300)
-        ax = fig.add_subplot(111)
-        # ax.plot(data['x'], data['y'], color='black')
-        ax.add_patch(Rectangle((-170, -170), 340, 340, color="lightgray", alpha=0.6))
-        ax = sns.scatterplot(data=data, x="x", y="y", hue='behavior_label', size=0.01,
-                             palette=behavior_color, alpha=0.7, legend=False)
-        color = 'black'
-        alpha_value = 0.7
-        line_value = 1.5
-        ax.plot([250, 250], [-250, 250], linewidth=line_value, color=color, alpha=alpha_value)
-        ax.plot([-250, -250], [-250, 250], linewidth=line_value, color=color, alpha=alpha_value)
-        ax.plot([-250, 250], [250, 250], linewidth=line_value, color=color, alpha=alpha_value)
-        ax.plot([-250, 250], [-250, -250], linewidth=line_value, color=color, alpha=alpha_value)
-        # ax.add_patch(Rectangle((-250, -250), 500, 500, color="lightgray", alpha=0.4))
-        plt.axis('off')
-        plt.show()
-        plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/inside_outside/add_behavior_34/'
-                    '{}.tiff'.format(j), dpi=300, transparent=True)
-        plt.close()
-
+    # a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
+    #              name="video_info.xlsx", column='roundTime', element=1)
+    # ExperimentTime = 'night'
+    # # gender = 'male'
+    #
+    # A = choose_data(a, column='ExperimentTime', element=ExperimentTime)
+    # # B = choose_data(A, column='gender', element=gender)
+    # # for time_state in range(1, 7):
+    # time_state = 6
+    # # 多条件筛选
+    # X = choose_data(A, column='split_number', element=time_state)  # split_number=1 not have ''
+    #
+    # a = pd.read_excel('D:/3D_behavior/Spontaneous_behavior/result_fang/video_info.xlsx')
+    #
+    # df_day = pd.DataFrame(a, columns=["Unique_serial_number"])
+    # # data = df_day.values.tolist()
+    #
+    # csv_FD = []
+    # for item in tqdm(df_day['Unique_serial_number'][0:432]):
+    #     csv_result3 = search_csv(
+    #         path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/back_coordinates_origin/",
+    #         name="rec-{}-G1-2022114230_Cali_Data3d_Replace".format(item))
+    #     csv_FD.append(csv_result3[0])
+    #
+    # behavior_file = []
+    # for item in tqdm(df_day['Unique_serial_number'][0:432]):
+    #     csv_result4 = search_csv(
+    #         path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
+    #         name="rec-{}-G1-2022114230_Movement_Labels".format(item))
+    #     behavior_file.append(csv_result4[0])
+    #
+    # for j in range(len(csv_FD)):
+    #     data = pd.read_csv(csv_FD[j])
+    #     behavior_label = pd.read_csv(behavior_file[j])
+    #     data['behavior_label'] = behavior_label.iloc[:, 1:2]
+    #     fig = plt.figure(figsize=(6, 6), dpi=300)
+    #     ax = fig.add_subplot(111)
+    #     # ax.plot(data['x'], data['y'], color='black')
+    #     ax.add_patch(Rectangle((-170, -170), 340, 340, color="lightgray", alpha=0.6))
+    #     ax = sns.scatterplot(data=data, x="x", y="y", hue='behavior_label', size=0.01,
+    #                          palette=behavior_color, alpha=0.7, legend=False)
+    #     color = 'black'
+    #     alpha_value = 0.7
+    #     line_value = 1.5
+    #     ax.plot([250, 250], [-250, 250], linewidth=line_value, color=color, alpha=alpha_value)
+    #     ax.plot([-250, -250], [-250, 250], linewidth=line_value, color=color, alpha=alpha_value)
+    #     ax.plot([-250, 250], [250, 250], linewidth=line_value, color=color, alpha=alpha_value)
+    #     ax.plot([-250, 250], [-250, -250], linewidth=line_value, color=color, alpha=alpha_value)
+    #     # ax.add_patch(Rectangle((-250, -250), 500, 500, color="lightgray", alpha=0.4))
+    #     plt.axis('off')
+    #     plt.show()
+    #     plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/inside_outside/add_behavior_34/'
+    #                 '{}.tiff'.format(j), dpi=300, transparent=True)
+    #     plt.close()
 
     """
         trace plot 
@@ -342,3 +341,85 @@ if __name__ == '__main__':
     #                 '{}.tiff'.format(j), dpi=300, transparent=True)
     #     plt.close()
 
+    """
+        total distance
+    """
+    ExperimentTime = 'night'
+    gender = 'male'
+    # a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
+    #              name="video_info.xlsx", column='roundTime', element=1)
+    a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
+                 name="video_info.xlsx", column='ExperimentTime', element=ExperimentTime)
+
+    # A = choose_data(a, column='ExperimentTime', element=ExperimentTime)
+
+    B = choose_data(a, column='gender', element=gender)
+    for time_state in range(1, 7):
+        # time_state = 6
+        # globals()['distance' + str(time_state * 10 - 5)] = []  # 5min
+        globals()['distance' + str(time_state * 10)] = []
+        # 多条件筛选
+        X = choose_data(B, column='split_number', element=time_state)  # split_number=1 not have ''
+
+        # a = pd.read_excel('D:/3D_behavior/Spontaneous_behavior/result_fang/video_info.xlsx')
+
+        df_day = pd.DataFrame(X, columns=["Unique_serial_number"])
+        # data = df_day.values.tolist()
+
+        csv_FD = []
+        for item in tqdm(df_day['Unique_serial_number'][0:15]):
+            csv_result3 = search_csv(
+                path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/back_coordinates_origin/",
+                name="rec-{}-G1-2022114230_Cali_Data3d_Replace".format(item))
+            csv_FD.append(csv_result3[0])
+
+        for x in range(len(csv_FD)):
+            data_1 = pd.read_csv(csv_FD[x])
+            distance = []
+            for i in range(1, len(data_1)):
+                dis = np.sqrt(np.square(data_1['x'].iloc[i] - data_1['x'].iloc[i - 1]) + np.square(
+                    data_1['y'].iloc[i] - data_1['y'].iloc[i - 1]))
+                distance.append(dis)
+
+            distance.insert(0, np.mean(distance))
+            data_1['distance'] = distance
+
+            # distance_1 = data_1['distance'].iloc[0 * 9000:(0 + 1) * 9000].sum()
+            # distance_2 = data_1['distance'].iloc[1 * 9000:(1 + 1) * 9000].sum()  # 5min
+
+            distance_2 = data_1['distance'].iloc[0 * 9000:(1 + 1) * 9000].sum()  # 10min
+
+            # globals()['distance' + str(time_state * 10 - 5)].append(distance_1)
+            globals()['distance' + str(time_state * 10)].append(distance_2)
+
+    """
+        5min导出结果
+    """
+    # distance_all = []
+    # for x in range(5, 65, 5):
+    #     distance_all = distance_all + globals()['distance' + str(x)]
+    #
+    # distance_all = np.array(distance_all).reshape(12, int(len(distance_all) / 12))
+    # distance_all = pd.DataFrame(distance_all)
+    # distance_all = distance_all.applymap(lambda y: y / 1000)
+    # # distance_all = distance_all.rename(columns={0: '5min', 1: '10min'}, index={0: 'mouse1', 1: 'mouse2'})
+    # distance_all = distance_all.rename(index={0: '5min', 1: '10min'}, columns={0: 'mouse1', 1: 'mouse2'})
+    # # distance_all = distance_all.rename(columns={distance_all.columns[0]: '5min'})
+    # distance_all.to_excel('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/total_distance/fang/'
+    #                       '{}_{}_5min.xlsx'.format(gender, ExperimentTime))
+
+    """
+        10min导出结果
+    """
+    distance_all = []
+    for x in range(10, 70, 10):
+        distance_all = distance_all + globals()['distance' + str(x)]
+
+    distance_all = np.array(distance_all).reshape(6, int(len(distance_all) / 6))
+    distance_all = pd.DataFrame(distance_all)
+    distance_all = distance_all.applymap(lambda y: y / 1000)
+    # distance_all = distance_all.rename(columns={0: '10min', 1: '20min'}, index={0: 'mouse1', 1: 'mouse2'})
+    distance_all = distance_all.rename(index={0: '10min', 1: '20min'}, columns={0: 'mouse1', 1: 'mouse2'})
+    # distance_all = distance_all.rename(columns={distance_all.columns[0]: '5min'})
+    distance_all.to_excel('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/total_distance/fang/'
+                          '{}_{}_10min.xlsx'.format(gender, ExperimentTime))
