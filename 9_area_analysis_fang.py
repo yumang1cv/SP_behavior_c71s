@@ -165,14 +165,64 @@ if __name__ == '__main__':
                 name="rec-{}-G1-2022114230_Cali_Data3d_Replace".format(item))
             csv_FD.append(csv_result3[0])
 
-        outside_angle = outside_angle_time(csv_FD, length=500)
-        outside_angle_all.append(outside_angle)
+        #     outside_angle = outside_angle_time(csv_FD, length=500)
+        #     outside_angle_all.append(outside_angle)
+        #
+        #     print('第{}分钟已计算'.format(time_state * 10))
+        #
+        # outside_angle_all = pd.DataFrame(outside_angle_all)
+        # outside_angle_all.to_excel('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area'
+        #                            '/9area_analysis/outside_angle_time_{}.xlsx'.format(roundTime))
 
+        """
+            方形旷场内部三区域分析（外角为弧型）
+        """
+        #     outside_angle = []
+        #     for file_num in range(len(csv_FD)):
+        #         data1 = pd.read_csv(csv_FD[file_num])
+        #         data2 = data1.iloc[2:, 4:7]
+        #
+        #         # R = np.sqrt(np.square(250) + np.square(125))
+        #         m = 0  # 外侧角落时间
+        #         for i in range(len(data2)):
+        #             if np.square(279.508) <= np.square(data2['x'].iloc[i]) + np.square(data2['y'].iloc[i]):
+        #                 m = m + 1
+        #
+        #         outside_angle.append(m / 30)
+        #
+        #     center_time_all.append(outside_angle)
+        #     print('第{}分钟已计算'.format(time_state * 10))
+        #
+        # center_time_all = pd.DataFrame(center_time_all).T
+        # center_time_all.to_excel('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area'
+        #                          '/9area_analysis/outside_angle_xiangdui.xlsx')
+        """
+            方形旷场内部三区域分析（外角为三角形）
+        """
+        outside_angle = []
+        for file_num in range(len(csv_FD)):
+            data1 = pd.read_csv(csv_FD[file_num])
+            data2 = data1.iloc[2:, 4:7]
+
+            # R = np.sqrt(np.square(250) + np.square(125))
+            m = 0  # 外侧角落时间
+            for i in range(len(data2)):
+                # if data2['x'].iloc[i] + data2['y'].iloc[i]-375 > 0 or data2['x'].iloc[i] + data2['y'].iloc[i]+375 < 0 or\
+                #         -data2['x'].iloc[i] + data2['y'].iloc[i]-375 > 0 or -data2['x'].iloc[i] + data2['y'].iloc[i]+375 < 0:
+                #     m = m + 1
+                if np.abs(data2['x'].iloc[i]) > 125 and np.abs(data2['y'].iloc[i]) > 125:
+                    m = m + 1
+
+            # outside_angle.append(m / 30 / 312.5)
+            outside_angle.append(m / 30)
+
+        center_time_all.append(outside_angle)
         print('第{}分钟已计算'.format(time_state * 10))
 
-    outside_angle_all = pd.DataFrame(outside_angle_all)
-    outside_angle_all.to_excel('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area'
-                               '/9area_analysis/outside_angle_time_{}.xlsx'.format(roundTime))
+    center_time_all = pd.DataFrame(center_time_all).T
+    center_time_all.to_excel('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area'
+                             '/9area_analysis/outside_jiaoluo.xlsx')
+
     """
         9 区域分析代码
     """

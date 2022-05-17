@@ -29,7 +29,7 @@ for label in range(len(names)):
     # time = ['0~10min', '10~20min', '20~30min', '30~40min', '40~50min', '50~60min']*4
     # time = ['10min', '20min', '30min', '40min', '50min', '60min'] * 4
     # time = [i for i in range(1, 61, 1)] * 4
-    time = [i for i in range(10, 70, 10)] * 1
+    time = [i for i in range(10, 70, 10)] * 4
     values = male_day['{}'.format(label)].tolist() + male_night['{}'.format(label)].tolist() + female_day[
         '{}'.format(label)].tolist() + female_night['{}'.format(label)].tolist()
 

@@ -425,6 +425,15 @@
     12、Rising:[14,34,35,40]                           13、Climbing up:[4,39] 
     14、Pause:[5,13]   
 """
+
+"""
+    fang-Spontaneous Shank3B All Behavior Class Combine0511-4类
+    1、Kniematic:[1,2,3,4,5,6,7]              2、standing: [8,10,11,12,13]                    3、Grooming:[9]
+    4、Pause:[4]       
+"""
+
+# class_label_dict = {1: [1, 2, 3, 4, 5, 6, 7], 2: [8, 10, 11, 12, 13], 3: [9], 4: [14]}
+
 # class_label_dict = {1: [23,22] , 2: [1,31,32], 3: [2,16], 4: [11, 15, 29]  , 5: [25,37], 6: [7,8,17,24,30],
 #                     7: [12,20,21], 8: [6,18,28,38], 9: [9,10,19,27], 10: [33]  , 11: [3,26,36],
 #                     12: [14,34,35,40] , 13: [4,39],14:[5,13]}
@@ -439,7 +448,6 @@ import pandas as pd
 import os
 from tqdm import tqdm
 
-
 # class_label_dict = {33: 'Running', 1: 'Running', 2: 'Running', 40: 'Trotting', 9: 'Trotting', 5: 'Right turning',
 #                     30: 'Right turning', 14: 'Right turning', 6: 'Left turning', 34: 'Left turning',
 #                     19: 'Up search/Rising', 39: 'Climbing up', 11: 'Climbing up', 12: 'Climbing up', 27: 'Falling',
@@ -451,10 +459,12 @@ from tqdm import tqdm
 #                     23: 'Rearing/Diving', 13: 'Rearing/Diving', 38: 'Sniffing and Walking'}
 
 
-class_label_dict = {23: 1, 22: 1, 1: 2, 31: 2, 32: 2, 2: 3, 16: 3, 11: 4, 15: 4, 29: 4, 25: 5, 37: 5,
-                    7: 6, 8: 6, 17: 6, 24: 6, 30: 6, 12: 7, 20: 7, 21: 7, 6: 8, 18: 8, 28: 8, 38: 8,
-                    9: 9, 10: 9, 19: 9, 27: 9, 33: 10, 3: 11, 26: 11, 36: 11, 14: 12, 34: 12, 35: 12,
-                    40: 12, 4: 13, 39: 13, 5: 14, 13: 14}
+# class_label_dict = {23: 1, 22: 1, 1: 2, 31: 2, 32: 2, 2: 3, 16: 3, 11: 4, 15: 4, 29: 4, 25: 5, 37: 5,
+#                     7: 6, 8: 6, 17: 6, 24: 6, 30: 6, 12: 7, 20: 7, 21: 7, 6: 8, 18: 8, 28: 8, 38: 8,
+#                     9: 9, 10: 9, 19: 9, 27: 9, 33: 10, 3: 11, 26: 11, 36: 11, 14: 12, 34: 12, 35: 12,
+#                     40: 12, 4: 13, 39: 13, 5: 14, 13: 14}
+
+class_label_dict = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 2, 10: 2, 11: 2, 12: 2, 13: 2, 9: 3, 14: 4}
 
 
 def open_data(data_path, file_type):
@@ -476,11 +486,11 @@ def rename_label(file_path):
 
 
 if __name__ == '__main__':
-    # file_list = open_data(
-    #     'E:/Shank3B-square-SP-Looming-result/Supplement/BeAMapping_replace/',
-    #     'Feature_Space.csv')
-    file_list = open_data('E:/Shank3B-square-SP-Looming-result/Supplement/BeAMapping_replace/',
-                          'Movement_Labels.csv')
+    file_list = open_data(
+        'E:/Shank3B-square-SP-Looming-result/BeAMapping_Spontaneous/Sp_All_combine/',
+        'Feature_Space.csv')
+    # file_list = open_data('E:/Shank3B-square-SP-Looming-result/BeAMapping_Spontaneous/Sp_All_combine/',
+    #                       'Movement_Labels.csv')
     # file_list = sorted(file_list, key=int)   # sort file use num
     for i in tqdm(range(0, len(file_list))):
         with open(file_list[i], 'rb') as file:
@@ -489,8 +499,8 @@ if __name__ == '__main__':
             new_label = []
             for j in range(len(first_column)):
                 new_label.append(class_label_dict[first_column[j]])
-            df["new_label"] = new_label
-            df.rename(columns={'new_label': new_label[0]}, inplace=True)
+            df["new_label_combine"] = new_label
+            # df.rename(columns={'new_label_combine': new_label[0]}, inplace=True)
             # df["new_label_name"] = new_label
             # df.rename(columns={'new_label_name': new_label[0]}, inplace=True)
             df.to_csv(file_list[i], index=False)
