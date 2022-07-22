@@ -1,12 +1,14 @@
 # -*- coding:utf-8 -*-
-# @FileName  :SP_behavior_statespace_60.py
-# @Time      :2022/5/16 17:09
+# @FileName  :velocity_cali.py
+# @Time      :2022/7/21 10:46
 # @Author    :XuYang
+
 import pandas as pd
 import os
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import matplotlib
+import numpy as np
 
 matplotlib.use('Qt5Agg')
 
@@ -227,6 +229,56 @@ def data_combine(input_data, special_time_start, special_time_end):
     return data
 
 
+def one_hour_speed(file_path, num):
+    ten_min = pd.read_csv(file_path[num])  # 10min的 feature_space 数据
+    ten_min_x = ten_min.loc[2:, 'back'].tolist()
+    ten_min_y = ten_min.loc[2:, 'back.1'].tolist()
+
+    twenty_min = pd.read_csv(file_path[num + 1])
+    twenty_min_x = twenty_min.loc[2:, 'back'].tolist()
+    twenty_min_y = twenty_min.loc[2:, 'back.1'].tolist()
+
+    thirty_min = pd.read_csv(file_path[num + 2])
+    thirty_min_x = thirty_min.loc[2:, 'back'].tolist()
+    thirty_min_y = thirty_min.loc[2:, 'back.1'].tolist()
+
+    forty_min = pd.read_csv(file_path[num + 3])
+    forty_min_x = forty_min.loc[2:, 'back'].tolist()
+    forty_min_y = forty_min.loc[2:, 'back.1'].tolist()
+
+    fifty_min = pd.read_csv(file_path[num + 4])
+    fifty_min_x = fifty_min.loc[2:, 'back'].tolist()
+    fifty_min_y = fifty_min.loc[2:, 'back.1'].tolist()
+
+    sixty_min = pd.read_csv(file_path[num + 5])
+    sixty_min_x = sixty_min.loc[2:, 'back'].tolist()
+    sixty_min_y = sixty_min.loc[2:, 'back.1'].tolist()
+
+    one_hour_x = ten_min_x + twenty_min_x + thirty_min_x + forty_min_x + fifty_min_x + sixty_min_x
+    one_hour_x = list(np.array(one_hour_x, dtype='float'))
+
+    one_hour_y = ten_min_y + twenty_min_y + thirty_min_y + forty_min_y + fifty_min_y + sixty_min_y
+    one_hour_y = list(np.array(one_hour_y, dtype='float'))
+
+    speed_all = []
+    for i in range(len(one_hour_y) - 1):
+        speed = np.sqrt(np.square(one_hour_x[i + 1] - one_hour_x[i]) + np.square(one_hour_y[i + 1] - one_hour_y[i]))
+        speed_all.append(speed)
+
+    speed_all.insert(-1, speed_all[-1])
+
+    one_hour_x = pd.DataFrame(one_hour_x)
+    one_hour_y = pd.DataFrame(one_hour_y)
+
+    speed_all = pd.DataFrame(speed_all)
+    speed_all.columns = ['speed']
+
+    one_hour_data_1 = pd.concat([one_hour_x, one_hour_y, speed_all], axis=1, join='inner')
+    one_hour_data_1.columns = ['x', 'y', 'speed']
+
+    return speed_all
+
+
 if __name__ == '__main__':
     gender = 'male'
     ExperimentTime = 'night'
@@ -245,8 +297,8 @@ if __name__ == '__main__':
     csv_MD = []
     for item in tqdm(df_night['Unique_serial_number']):
         csv_result3 = search_csv(
-            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
-            name="rec-{}-G1-2022114230_Feature_Space".format(item))
+            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/Calibrated_3DSkeleton_replace/",
+            name="rec-{}-G1-2022114230_Cali_Data3d".format(item))
         csv_MD.append(csv_result3[0])
 
     df_day = pd.DataFrame(D, columns=["Unique_serial_number"])
@@ -254,145 +306,51 @@ if __name__ == '__main__':
     csv_FD = []
     for item in tqdm(df_day['Unique_serial_number']):
         csv_result3 = search_csv(
-            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
-            name="rec-{}-G1-2022114230_Feature_Space".format(item))
+            path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/Calibrated_3DSkeleton_replace/",
+            name="rec-{}-G1-2022114230_Cali_Data3d".format(item))
         csv_FD.append(csv_result3[0])
 
-    # num = 0
+    one_hour_speed_data = one_hour_speed(csv_FD, 0)
     # ten_min = pd.read_csv(csv_FD[num])  # 10min的 feature_space 数据
+    # ten_min_x = ten_min.loc[2:, 'back'].tolist()
+    # ten_min_y = ten_min.loc[2:, 'back.1'].tolist()
     #
     # twenty_min = pd.read_csv(csv_FD[num + 1])
-    # twenty_min_seg = twenty_min.loc[:, 'segBoundary'].tolist()
-    # twenty_min_seg = [x + ten_min.iloc[-1, 1] for x in twenty_min_seg]
-    # twenty_min['segBoundary'] = twenty_min_seg
+    # twenty_min_x = twenty_min.loc[2:, 'back'].tolist()
+    # twenty_min_y = twenty_min.loc[2:, 'back.1'].tolist()
     #
     # thirty_min = pd.read_csv(csv_FD[num + 2])
-    # thirty_min_seg = thirty_min.loc[:, 'segBoundary'].tolist()
-    # thirty_min_seg = [x + twenty_min.iloc[-1, 1] for x in thirty_min_seg]
-    # thirty_min['segBoundary'] = thirty_min_seg
+    # thirty_min_x = thirty_min.loc[2:, 'back'].tolist()
+    # thirty_min_y = thirty_min.loc[2:, 'back.1'].tolist()
     #
     # forty_min = pd.read_csv(csv_FD[num + 3])
-    # forty_min_seg = forty_min.loc[:, 'segBoundary'].tolist()
-    # forty_min_seg = [x + thirty_min.iloc[-1, 1] for x in forty_min_seg]
-    # forty_min['segBoundary'] = forty_min_seg
+    # forty_min_x = forty_min.loc[2:, 'back'].tolist()
+    # forty_min_y = forty_min.loc[2:, 'back.1'].tolist()
     #
     # fifty_min = pd.read_csv(csv_FD[num + 4])
-    # fifty_min_seg = fifty_min.loc[:, 'segBoundary'].tolist()
-    # fifty_min_seg = [x + forty_min.iloc[-1, 1] for x in fifty_min_seg]
-    # fifty_min['segBoundary'] = fifty_min_seg
+    # fifty_min_x = fifty_min.loc[2:, 'back'].tolist()
+    # fifty_min_y = fifty_min.loc[2:, 'back.1'].tolist()
     #
     # sixty_min = pd.read_csv(csv_FD[num + 5])
-    # sixty_min_seg = sixty_min.loc[:, 'segBoundary'].tolist()
-    # sixty_min_seg = [x + fifty_min.iloc[-1, 1] for x in sixty_min_seg]
-    # sixty_min['segBoundary'] = sixty_min_seg
+    # sixty_min_x = sixty_min.loc[2:, 'back'].tolist()
+    # sixty_min_y = sixty_min.loc[2:, 'back.1'].tolist()
     #
-    # one_hour_data = pd.concat([ten_min, twenty_min, thirty_min, forty_min, fifty_min, sixty_min], axis=0)
-
-    Male_data = []
-    for num in range(0, len(csv_MD), 6):
-        one_hour = one_hour_data(csv_MD, num)
-        single_data = data_combine(one_hour, 0, 108000 - 5)
-        Male_data.append(single_data)
-
-    Female_data = []
-    for num in range(0, len(csv_FD), 6):
-        one_hour = one_hour_data(csv_FD, num)
-        single_data = data_combine(one_hour, 0, 108000 - 5)
-        Female_data.append(single_data)
-
-    fig = plt.figure(figsize=(20, 4), dpi=300)
-    ax = fig.add_subplot(111)
-    for j in range(len(Male_data)):
-        for i in range(len(Male_data[0])):
-            plt.broken_barh(Male_data[j][i], (j, 0.8), facecolors=color_list[i])
-            plt.broken_barh(Female_data[j][i], (j + 6, 0.8), facecolors=color_list[i])
-
-    # for i in range(len(Female_data[6])):
-    #     plt.broken_barh(Female_data[6][i], (12, 0.8), facecolors=color_list[i])
-
-    plt.axhline(y=5.9, linewidth=1.5, color='black', linestyle='--')
-    # plt.yticks([3, 9], ['Males', 'Females'], fontsize=12)
-    plt.xticks([0, 18000, 36000, 18000*3, 18000*4, 18000*5, 18000*6], ['0', '10', '20', '30', '40', '50', '60'], fontsize=20)
-    # plt.xticks([0, 9000, 18000], time_ticks, fontsize=12)
-    plt.yticks([])
-    plt.tight_layout()
-    # plt.axis('off')
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    for axis in ['top', 'bottom', 'left', 'right']:
-        ax.spines[axis].set_linewidth(1.5)
-    # plt.ion()
-    plt.show()
-    # plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/state_space/fang_figure/'
-    #             '{}.tiff'.format(ExperimentTime), dpi=300)
-    # plt.close()
-
-
-    # for time_state in range(1, 2):
-    #     # 多条件筛选
-    #     x = choose_data(A, column='split_number', element=time_state)  # split_number=1 not have ''
-    #     df_day = pd.DataFrame(x, columns=["Unique_serial_number"])
-    #     # data = df_day.values.tolist()
-    #     csv_FD = []
-    #     for item in tqdm(df_day['Unique_serial_number']):
-    #         csv_result3 = search_csv(
-    #             path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
-    #             name="rec-{}-G1-2022114230_Feature_Space".format(item))
-    #         csv_FD.append(csv_result3[0])
+    # one_hour_x = ten_min_x + twenty_min_x + thirty_min_x + forty_min_x + fifty_min_x + sixty_min_x
+    # one_hour_x = list(np.array(one_hour_x, dtype='float'))
     #
-    #     y = choose_data(D, column='split_number', element=time_state)  # split_number=1 not have ''
-    #     df_night = pd.DataFrame(y, columns=["Unique_serial_number"])
-    #     # data = df_night.values.tolist()
-    #     csv_FN = []
-    #     for item in tqdm(df_night['Unique_serial_number']):
-    #         csv_result4 = search_csv(
-    #             path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
-    #             name="rec-{}-G1-2022114230_Feature_Space".format(item))
-    #         csv_FN.append(csv_result4[0])
+    # one_hour_y = ten_min_y + twenty_min_y + thirty_min_y + forty_min_y + fifty_min_y + sixty_min_y
+    # one_hour_y = list(np.array(one_hour_y, dtype='float'))
     #
-    #     Male_data = []
-    #     for i in range(0, 6):
-    #         single_data = data_combine(csv_FD[i], 0, 17998)
-    #         Male_data.append(single_data)
-    #     # single_data = data_combine(file_list_1[0], 0, 25)
-    #     # Male_data.append(single_data)
+    # speed_all = []
+    # for i in range(len(one_hour_y) - 1):
+    #     speed = np.sqrt(np.square(one_hour_x[i + 1] - one_hour_x[i]) + np.square(one_hour_y[i + 1] - one_hour_y[i]))
+    #     speed_all.append(speed)
     #
-    #     Female_data = []
-    #     for i in range(0, 6):
-    #         single_data = data_combine(csv_FN[i], 0, 17998)
-    #         # print('第{}个文件sucess'.format(i))
-    #         Female_data.append(single_data)
-    #     #
-    #     # # plt.figure(figsize=(5, 1), dpi=300)
-    #     # fig, ax = plt.subplot()
-    #     if time_state == 1:
-    #         time_ticks = ['{}0'.format(time_state - 1), '{}5'.format(time_state - 1), '{}0'.format(time_state)]
-    #     else:
-    #         time_ticks = ['{}1'.format(time_state - 1), '{}5'.format(time_state - 1), '{}0'.format(time_state)]
+    # speed_all.insert(-1, speed_all[-1])
     #
-    #     fig = plt.figure(figsize=(5, 3), dpi=300)
-    #     ax = fig.add_subplot(111)
-    #     for j in range(len(Male_data)):
-    #         for i in range(len(Male_data[0])):
-    #             plt.broken_barh(Male_data[j][i], (j, 0.8), facecolors=color_list[i])
-    #             plt.broken_barh(Female_data[j][i], (j + 6, 0.8), facecolors=color_list[i])
+    # one_hour_x = pd.DataFrame(one_hour_x)
+    # one_hour_y = pd.DataFrame(one_hour_y)
+    # speed_all = pd.DataFrame(speed_all)
     #
-    #     # for i in range(len(Female_data[6])):
-    #     #     plt.broken_barh(Female_data[6][i], (12, 0.8), facecolors=color_list[i])
-    #
-    #     plt.axhline(y=5.9, linewidth=1.5, color='black', linestyle='--')
-    #     # plt.yticks([3, 9], ['Males', 'Females'], fontsize=12)
-    #     # plt.xticks([0, 9000, 18000], ['50', '55', '60'], fontsize=12)
-    #     plt.xticks([0, 9000, 18000], time_ticks, fontsize=12)
-    #     plt.yticks([])
-    #     plt.tight_layout()
-    #     # plt.axis('off')
-    #     ax.spines['right'].set_visible(False)
-    #     ax.spines['top'].set_visible(False)
-    #     for axis in ['top', 'bottom', 'left', 'right']:
-    #         ax.spines[axis].set_linewidth(1.5)
-    #     # plt.ion()
-    #     plt.show()
-    #     # plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/state_space/fang_figure'
-    #     #             '/{}_female_{}_{}0~{}0.tiff'.format(gender, ExperimentTime, time_state - 1, time_state), dpi=300)
-    #     # plt.close()
+    # one_hour_data_1 = pd.concat([one_hour_x, one_hour_y, speed_all], axis=1, join='inner')
+    # one_hour_data_1.columns = ['x', 'y', 'speed']

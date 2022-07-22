@@ -41,9 +41,9 @@ matplotlib.use('Qt5Agg')
 #     Immobility:{7、Sniffing:[1, 4, 6, 10, 14, 28, 29, 30],8、 Grooming:[39, 40], 9、Diving:[11, 25], 10、Rising:[2]}
 # """
 
-color_list = ['#D53624', '#FF6F91', '#FF9671', '#FFC75F', '#C34A36',
-              '#00C2A8', '#00a3af', '#008B74', '#D5CABD', '#D65DB1',
-              '#cb3a56', '#845EC2', '#B39CD0', '#98d98e']
+color_list = ['#D32F2F', '#FF8A65', '#FFCDD2', '#FFAB91', '#FFCC80',
+              '#4CAF50', '#C5E1A5', '#78b778', '#F06292', '#4FC3F7',
+              '#FBE9E7', '#00B8D4', '#9E9E9E', '#81C784']
 # """
 #     Spontaneous Behavior Class Combine-Final
 #     1、Running:[15, 16, 22] '#D53624'     2、Fast walking/Trotting:[8] '#FF6F91'          3、Right turning:[7, 31, 34] '#FF9671'
@@ -59,12 +59,12 @@ color_list = ['#D53624', '#FF6F91', '#FF9671', '#FFC75F', '#C34A36',
 #               '#fddc2f', '#fae15e', '#8b8b8b', '#5ca95c']
 """
     Spontaneous Behavior Class Combine-YJL
-    1、Running:[15, 16, 22] '#fd7f69'     2、Fast walking/Trotting:[8] '#fa9b8b'          3、Right turning:[7, 31, 34] '#64b0fb'
-    4、Left turning:[9, 21, 38] '#87c0f9' 5、Jumping:[33, 35] '#fcb83c'                   6、Climbing up:[26, 12]  '#3e9a3e'
-    7、Falling:[32]  '#95c695'            8、Up search/Rising:[13, 36, 17, 18] '#78b778'  9、Grooming:[2, 39, 40]  '#fc3cfc'
-    10、Sniffing and Walking:[5, 6, 23, 24, 37]  '#41a0fd'                               11、Stepping:[3, 19]  '#fddc2f'
-    12、Sniffing:[28, 27, 14, 20, 29, 1]   '#fae15e'                                     13、Sniffing pause:[4, 10, 30] '#8b8b8b'
-    14、Rearing/Diving:[11, 25]  '#5ca95c'
+    1、Running:[15, 16, 22] '#D32F2F'     2、Fast walking/Trotting:[8] '#FF8A65'          3、Right turning:[7, 31, 34] '#FFCDD2'
+    4、Left turning:[9, 21, 38] '#FFAB91' 5、Jumping:[33, 35] '#FFCC80'                   6、Climbing up:[26, 12]  '#4CAF50'
+    7、Falling:[32]  '#C5E1A5'            8、Up search/Rising:[13, 36, 17, 18] '#78b778'  9、Grooming:[2, 39, 40]  '#F06292'
+    10、Sniffing and Walking:[5, 6, 23, 24, 37]  '#4FC3F7'                               11、Stepping:[3, 19]  '#FBE9E7'
+    12、Sniffing:[28, 27, 14, 20, 29, 1]   '#00B8D4'                                     13、Sniffing pause:[4, 10, 30] '#9E9E9E'
+    14、Rearing/Diving:[11, 25]  '#81C784'
 """
 
 
@@ -206,7 +206,7 @@ if __name__ == '__main__':
     C = choose_data(a, column="gender", element='female')
     D = choose_data(C, column='ExperimentTime', element=ExperimentTime)
 
-    for time_state in range(1, 7):
+    for time_state in range(6, 7):
         # 多条件筛选
         x = choose_data(A, column='split_number', element=time_state)  # split_number=1 not have ''
         df_day = pd.DataFrame(x, columns=["Unique_serial_number"])
