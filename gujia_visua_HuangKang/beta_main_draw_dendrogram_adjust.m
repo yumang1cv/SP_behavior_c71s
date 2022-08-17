@@ -2,7 +2,7 @@
 genPath = genpath('D:/3D_behavior/Spontaneous_behavior/code/gujia_visua_HuangKang');
 addpath(genPath)
 
-working_path = 'D:/3D_behavior/Spontaneous_behavior/result_fang/results3';
+working_path = 'D:/3D_behavior/Sp_behavior_new/results';
 
 nfeatures = 16;
 selection = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14];
@@ -23,7 +23,7 @@ end
 %% data, correction_3D
 % dataname_list = {'rec-1-Moedl-20210902154720','rec-1-sham-20210902142949','rec-2-Moedl-20210902155917',...
 %                  'rec-2-sham-20210902144146','rec-3-Moedl-20210902161217','rec-3-sham-20210902145419'};
-dataname_struct = dir([working_path,'/3Dskeleton/Calibrated_3DSkeleton/','*_Cali_Data3d.csv']);
+dataname_struct = dir([working_path,'/3Dskeleton/','*_Cali_Data3d.csv']);
 dataname_list = cell(length(dataname_struct), 1);
 for i_name = 1:length(dataname_struct)
     dataname_cell = {dataname_struct.name}';
@@ -37,7 +37,7 @@ fs = 30;
 ali_XY = []; raw_XY = []; vel_XY = []; labels = []; reMap = [];
 single_frame = 1;
 for i_num = 1:length(dataname_list)
-    data3d = importdata([working_path,'/3Dskeleton/Calibrated_3DSkeleton/',dataname_list{i_num},'_Cali_Data3d.csv']);
+    data3d = importdata([working_path,'/3Dskeleton/',dataname_list{i_num},'_Cali_Data3d.csv']);
     tempdata = fillmissing(data3d.data, 'linear');
     RawData.X = tempdata(:,1:3:nfeatures*3);
     RawData.Y = tempdata(:,2:3:nfeatures*3);
@@ -57,7 +57,7 @@ for i_num = 1:length(dataname_list)
     BeA_DecData_XYZ = body_alignment(PreproData, BA);
     ali_XY = [ali_XY, BeA_DecData_XYZ];
     
-    feature_space_csv = importdata([working_path,'/BeAMapping/',dataname_list{i_num},'_Feature_Space.csv']).data;
+    feature_space_csv = importdata([working_path,'/BeAOutputs/csv_file_output/',dataname_list{i_num},'_Feature_Space.csv']).data;
     labels = [labels; feature_space_csv(:,1)];
     single_boundary = feature_space_csv(:,2)';
     boundary = [0, single_boundary(1:end-1)] + single_frame;

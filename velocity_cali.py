@@ -9,6 +9,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
+import seaborn as sns
 
 matplotlib.use('Qt5Agg')
 
@@ -271,7 +272,7 @@ def one_hour_speed(file_path, num):
     one_hour_y = pd.DataFrame(one_hour_y)
 
     speed_all = pd.DataFrame(speed_all)
-    speed_all.columns = ['speed']
+    # speed_all.columns = ['speed']
 
     one_hour_data_1 = pd.concat([one_hour_x, one_hour_y, speed_all], axis=1, join='inner')
     one_hour_data_1.columns = ['x', 'y', 'speed']
@@ -310,47 +311,44 @@ if __name__ == '__main__':
             name="rec-{}-G1-2022114230_Cali_Data3d".format(item))
         csv_FD.append(csv_result3[0])
 
-    one_hour_speed_data = one_hour_speed(csv_FD, 0)
-    # ten_min = pd.read_csv(csv_FD[num])  # 10min的 feature_space 数据
-    # ten_min_x = ten_min.loc[2:, 'back'].tolist()
-    # ten_min_y = ten_min.loc[2:, 'back.1'].tolist()
+    one_hour_speed_data = pd.DataFrame()
+    for i in range(0, len(csv_MD), 6):
+        one_hour_speed_data_single = pd.DataFrame()
+        one_hour_speed_data_single = one_hour_speed(csv_MD, i)
+        one_hour_speed_data = pd.concat([one_hour_speed_data, one_hour_speed_data_single], axis=1)
+
+    fig, ax = plt.subplots(6, 1, figsize=(8, 4), dpi=300)
+    fig.tight_layout()
+    # ax[1].bar([i for i in range(len(one_hour_speed_data.iloc[0:150, 1]))], one_hour_speed_data.iloc[0:150, 1])
+
+    for x in range(0, 6):
+        ax[x].bar([i for i in range(len(one_hour_speed_data.iloc[:, x]))], one_hour_speed_data.iloc[:, x])
+        ax[x].spines['top'].set_visible(False)
+        ax[x].spines['bottom'].set_visible(False)
+        ax[x].spines['left'].set_visible(False)
+        ax[x].spines['right'].set_visible(False)
+        ax[x].set_ylim(0, 15)
+        ax[x].axes.xaxis.set_visible(False)
+        ax[x].axes.yaxis.set_visible(False)
+
+    # set the spacing between subplots
+    plt.subplots_adjust(left=0.1,
+                        bottom=0.1,
+                        right=0.9,
+                        top=0.9,
+                        wspace=0.2,
+                        hspace=0.2)
+
+    plt.show()
+    plt.savefig('D:/3D_behavior/test_v3.tiff', dpi=300)
+    plt.close()
+
+    # # sns.heatmap(data=one_hour_speed_data)
+    # sns.lineplot(data=one_hour_speed_data)
     #
-    # twenty_min = pd.read_csv(csv_FD[num + 1])
-    # twenty_min_x = twenty_min.loc[2:, 'back'].tolist()
-    # twenty_min_y = twenty_min.loc[2:, 'back.1'].tolist()
+    # ax1 = plt.subplot(311)
+    # sns.lineplot(data=one_hour_speed_data[:, [0]])
     #
-    # thirty_min = pd.read_csv(csv_FD[num + 2])
-    # thirty_min_x = thirty_min.loc[2:, 'back'].tolist()
-    # thirty_min_y = thirty_min.loc[2:, 'back.1'].tolist()
-    #
-    # forty_min = pd.read_csv(csv_FD[num + 3])
-    # forty_min_x = forty_min.loc[2:, 'back'].tolist()
-    # forty_min_y = forty_min.loc[2:, 'back.1'].tolist()
-    #
-    # fifty_min = pd.read_csv(csv_FD[num + 4])
-    # fifty_min_x = fifty_min.loc[2:, 'back'].tolist()
-    # fifty_min_y = fifty_min.loc[2:, 'back.1'].tolist()
-    #
-    # sixty_min = pd.read_csv(csv_FD[num + 5])
-    # sixty_min_x = sixty_min.loc[2:, 'back'].tolist()
-    # sixty_min_y = sixty_min.loc[2:, 'back.1'].tolist()
-    #
-    # one_hour_x = ten_min_x + twenty_min_x + thirty_min_x + forty_min_x + fifty_min_x + sixty_min_x
-    # one_hour_x = list(np.array(one_hour_x, dtype='float'))
-    #
-    # one_hour_y = ten_min_y + twenty_min_y + thirty_min_y + forty_min_y + fifty_min_y + sixty_min_y
-    # one_hour_y = list(np.array(one_hour_y, dtype='float'))
-    #
-    # speed_all = []
-    # for i in range(len(one_hour_y) - 1):
-    #     speed = np.sqrt(np.square(one_hour_x[i + 1] - one_hour_x[i]) + np.square(one_hour_y[i + 1] - one_hour_y[i]))
-    #     speed_all.append(speed)
-    #
-    # speed_all.insert(-1, speed_all[-1])
-    #
-    # one_hour_x = pd.DataFrame(one_hour_x)
-    # one_hour_y = pd.DataFrame(one_hour_y)
-    # speed_all = pd.DataFrame(speed_all)
-    #
-    # one_hour_data_1 = pd.concat([one_hour_x, one_hour_y, speed_all], axis=1, join='inner')
-    # one_hour_data_1.columns = ['x', 'y', 'speed']
+    # # ax1 = plt.subplot(312)
+    # # sns.lineplot(data=one_hour_speed_data[:, 1])
+    # plt.show()

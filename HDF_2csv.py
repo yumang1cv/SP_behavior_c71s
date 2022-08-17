@@ -12,7 +12,7 @@ import glob
 import h5py
 
 # 读取文件
-work_path = 'D:/3D_behavior/TianYe_drug/Sp_behavior_result/'  # result路径
+work_path = 'F:/SH_black_mouse/results/'  # result路径
 
 data_path = natsorted(glob.glob(os.path.join(work_path, 'BeAOutputs', '*_results.h5')))
 
@@ -21,7 +21,7 @@ if not os.path.exists(save_path):
     os.makedirs(save_path)
 
 # 准备文件名字
-file_dir = "D:/3D_behavior/TianYe_drug/Sp_behavior_result/BeAOutputs"  # BeAOutputs路径
+file_dir = "F:/SH_black_mouse/results/BeAOutputs"  # BeAOutputs路径
 for files in os.walk(file_dir, topdown=False):
     # print(files[2])  # 当前路径下所有非目录子文件
     file_name = files[2]
@@ -47,21 +47,21 @@ def feature_space_output(file_path):
     with h5py.File(file_path, 'r') as f:
         Movement_features = f["Movement_features"]
 
-        movement_label = Movement_features["movement_label"].value.tolist()
+        movement_label = Movement_features["movement_label"][()].tolist()
         movement_label = list(np.ravel(movement_label))
         movement_label = list(map(int, movement_label))
 
-        segBoundary = Movement_features["segBoundary"].value.tolist()
+        segBoundary = Movement_features["segBoundary"][()].tolist()
         segBoundary = list(np.ravel(segBoundary))
         segBoundary = list(map(int, segBoundary))
 
-        umap1 = Movement_features["umap1"].value.tolist()
+        umap1 = Movement_features["umap1"][()].tolist()
         umap1 = list(np.ravel(umap1))
 
-        umap2 = Movement_features["umap2"].value.tolist()
+        umap2 = Movement_features["umap2"][()].tolist()
         umap2 = list(np.ravel(umap2))
 
-        zs_velocity = Movement_features["zs_velocity"].value.tolist()
+        zs_velocity = Movement_features["zs_velocity"][()].tolist()
         zs_velocity = list(np.ravel(zs_velocity))
 
     feature_space['movement_label'] = movement_label
@@ -76,8 +76,8 @@ def feature_space_output(file_path):
 def Paras_data_output(file_path):
     with h5py.File(file_path, 'r') as f:
         FrameLevel_paras = f["FrameLevel_paras"]
-        Paras_data = FrameLevel_paras['Paras_data'].value
-        Paras_names = FrameLevel_paras['Paras_names'].value
+        Paras_data = FrameLevel_paras['Paras_data'][()]
+        Paras_names = FrameLevel_paras['Paras_names'][()]
         Paras_all_data = np.vstack((Paras_names, Paras_data))
 
     Paras_all_data = pd.DataFrame(Paras_all_data)
@@ -88,8 +88,7 @@ def Paras_data_output(file_path):
 def data3D_output(file_path):
     with h5py.File(file_path, 'r') as f:
         threeD_skeleon = f["3Dskeleton"]
-        data3D = threeD_skeleon['data3D'].value
-
+        data3D = threeD_skeleon['data3D'][()]
     data3D = pd.DataFrame(data3D)
 
     return data3D
@@ -114,8 +113,11 @@ def movement_to_csv(data1):
 
 if __name__ == '__main__':
     for i in range(len(data_path)):
+        data3D_1 = data3D_output(data_path[i])
+        data3D_1.to_csv('{}/{}_Cali_Data3d.csv'.format(save_path, file_rname[i]), index=False)
+
         feature_space_1 = feature_space_output(data_path[i])
-        feature_space_1.to_csv('{}/{}_feature_space.csv'.format(save_path, file_rname[i]), index=False)
+        feature_space_1.to_csv('{}/{}_Feature_Space.csv'.format(save_path, file_rname[i]), index=False)
 
         movement_label_1 = movement_to_csv(feature_space_1)
         movement_label_1.to_csv('{}/{}_Movement_Labels.csv'.format(save_path, file_rname[i]), header=False, index=False)
@@ -123,6 +125,4 @@ if __name__ == '__main__':
         Paras_all_data_1 = Paras_data_output(data_path[i])
         Paras_all_data_1.to_csv('{}/{}_Paras.csv'.format(save_path, file_rname[i]), index=False)
 
-        data3D_1 = data3D_output(data_path[i])
-        data3D_1.to_csv('{}/{}_Cali_Data3d.csv'.format(save_path, file_rname[i]), index=False)
-        print('第{}个已生成'.format(i+1))
+        print('第{}个已生成'.format(i + 1))
