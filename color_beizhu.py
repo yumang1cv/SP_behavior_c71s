@@ -4,9 +4,23 @@ import seaborn as sns
 
 matplotlib.use('Qt5Agg')
 
-names = ['Running', 'Fast walking_Trotting', 'Right turning', 'Left turning', 'Jumping', 'Climbing up', 'Falling',
-         'Up search_Rising', 'Grooming', 'Sniffing and Walking', 'Stepping', 'Sniffing', 'Sniffing pause',
-         'Rearing_Diving']
+color_dict = {'running': '#F44336',
+              'walking': '#FF5722',
+              'right_turning': '#FFCDD2',
+              'left_turning': '#FFAB91',
+              'stepping': '#BCAAA4',
+              'climb_up': '#43A047',
+              'rearing': '#66BB6A',
+              'hunching': '#81C784',
+              'rising': '#9CCC65',
+              'grooming': '#AB47BC',
+              'sniffing': '#26A69A',
+              'pause': '#B0BEC5',
+              'jumping': '#FFB74D',
+              }
+movement_label = list(color_dict.keys())
+
+names = movement_label
 
 # color_list = ['#D53624', '#FF6F91', '#FF9671', '#FFC75F', '#C34A36',
 #               '#00C2A8', '#00a3af', '#008B74', '#D5CABD', '#D65DB1',
@@ -22,18 +36,8 @@ names = ['Running', 'Fast walking_Trotting', 'Right turning', 'Left turning', 'J
 #     14、Rearing/Diving:[11, 25]  '#98d98e'
 # """
 
-color_list = ['#fd7f69', '#fa9b8b', '#64b0fb', '#87c0f9', '#fcb83c',
-              '#3e9a3e', '#95c695', '#78b778', '#fc3cfc', '#41a0fd',
-              '#fddc2f', '#fae15e', '#8b8b8b', '#5ca95c']
-"""
-    Spontaneous Behavior Class Combine-YJL
-    1、Running:[15, 16, 22] '#fd7f69'     2、Fast walking/Trotting:[8] '#fa9b8b'          3、Right turning:[7, 31, 34] '#64b0fb'
-    4、Left turning:[9, 21, 38] '#87c0f9' 5、Jumping:[33, 35] '#fcb83c'                   6、Climbing up:[26, 12]  '#3e9a3e'
-    7、Falling:[32]  '#95c695'            8、Up search/Rising:[13, 36, 17, 18] '#78b778'  9、Grooming:[2, 39, 40]  '#fc3cfc'
-    10、Sniffing and Walking:[5, 6, 23, 24, 37]  '#41a0fd'                               11、Stepping:[3, 19]  '#fddc2f'
-    12、Sniffing:[28, 27, 14, 20, 29, 1]   '#fae15e'                                     13、Sniffing pause:[4, 10, 30] '#8b8b8b'
-    14、Rearing/Diving:[11, 25]  '#5ca95c'
-"""
+color_list = list(color_dict.values())
+
 for i in range(len(color_list)):
     num = i
     fig = plt.figure()
@@ -46,7 +50,7 @@ for i in range(len(color_list)):
     ax.axis('off')
     plt.show()
     plt.savefig(
-        'D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/color/color_v3/{}.tiff'.format(names[num]),
+        r'D:\3D_behavior\Spontaneous_behavior\Sp_behavior_new\analysis_result\color/{}.tiff'.format(names[num]),
         dpi=300)
     plt.close()
 

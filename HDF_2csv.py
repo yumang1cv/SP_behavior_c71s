@@ -12,7 +12,7 @@ import glob
 import h5py
 
 # 读取文件
-work_path = 'F:/SH_black_mouse/results/'  # result路径
+work_path = r'E:\Ratstress_3D\results\new version-with correction\results7'  # result路径
 
 data_path = natsorted(glob.glob(os.path.join(work_path, 'BeAOutputs', '*_results.h5')))
 
@@ -21,7 +21,7 @@ if not os.path.exists(save_path):
     os.makedirs(save_path)
 
 # 准备文件名字
-file_dir = "F:/SH_black_mouse/results/BeAOutputs"  # BeAOutputs路径
+file_dir = r"E:\Ratstress_3D\results\new version-with correction\results7\BeAOutputs"  # BeAOutputs路径
 for files in os.walk(file_dir, topdown=False):
     # print(files[2])  # 当前路径下所有非目录子文件
     file_name = files[2]
@@ -125,4 +125,4 @@ if __name__ == '__main__':
         Paras_all_data_1 = Paras_data_output(data_path[i])
         Paras_all_data_1.to_csv('{}/{}_Paras.csv'.format(save_path, file_rname[i]), index=False)
 
-        print('第{}个已生成'.format(i + 1))
+        print('第{}个文件已生成, 还有{}文件待生成'.format(i + 1, len(data_path)-i-1))

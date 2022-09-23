@@ -14,16 +14,37 @@ import operator
 
 matplotlib.use('Qt5Agg')
 
-names = ['Running', 'Fast walking/Trotting', 'Right turning', 'Left turning',
-         'Jumping', 'Climbing up', 'Falling', 'Up search/Rising', 'Grooming',
-         'Sniffing and Walking', 'Stepping', 'Sniffing', 'Sniffing pause',
-         'Rearing/Diving']
+movement_index = {'running': 1,
+                  'walking': 2,
+                  'right_turning': 3,
+                  'left_turning': 4,
+                  'stepping': 5,
+                  'climb_up': 6,
+                  'rearing': 7,
+                  'hunching': 8,
+                  'rising': 9,
+                  'grooming': 10,
+                  'sniffing': 11,
+                  'pause': 12,
+                  'jumping': 13,
+                  }
 
-color_list = ['#D53624', '#FF6F91', '#FF9671', '#FFC75F', '#C34A36',
-              '#00C2A8', '#00a3af', '#008B74', '#D5CABD', '#D65DB1',
-              '#cb3a56', '#845EC2', '#B39CD0', '#98d98e']
-
-behavior_color = dict(zip([i for i in range(1, 15, 1)], color_list))
+color_dict = {'running': '#F44336',
+              'walking': '#FF5722',
+              'right_turning': '#FFCDD2',
+              'left_turning': '#FFAB91',
+              'stepping': '#BCAAA4',
+              'climb_up': '#43A047',
+              'rearing': '#66BB6A',
+              'hunching': '#81C784',
+              'rising': '#9CCC65',
+              'grooming': '#AB47BC',
+              'sniffing': '#26A69A',
+              'pause': '#B0BEC5',
+              'jumping': '#FFB74D',
+              }
+names = list(movement_index.keys())
+behavior_color = list(color_dict.values())
 
 
 def search_csv(path=".", name=""):  # 抓取csv文件
@@ -236,200 +257,201 @@ if __name__ == '__main__':
     #         if file.endswith(".csv"):
     #             # print(os.path.join(root, file))
     #             file_path.append(os.path.join(root, file))
-    a = read_csv(path=r'D:/3D_behavior/Spontaneous_behavior/result_fang',
-                 name="video_info.xlsx", column='roundTime', element=1)
+    a = read_csv(path=r'D:\3D_behavior\Spontaneous_behavior\Sp_behavior_new\results_new/',
+                 name="02_animal_info_square.xlsx", column='camera_type', element='RGB')
     ExperimentTime = 'night'
     gender = 'female'
 
-    # A = choose_data(a, column='ExperimentTime', element=ExperimentTime)
-    # B = choose_data(A, column='gender', element=gender)
-    for time_state in range(1, 7):
-        # time_state = 6
-        # 多条件筛选
-        X = choose_data(a, column='split_number', element=time_state)  # split_number=1 not have ''
-        df_day = pd.DataFrame(X, columns=["Unique_serial_number"])
-        # data = df_day.values.tolist()
+    # x = choose_data(a, column='gender', element=gender)   # 选取实验性别
+    y = choose_data(a, column='ExperimentTime', element=ExperimentTime)  # 选取实验时间
+    # z = choose_data(y, column='origin_seg', element=origin_seg)   # 选取实验时段
 
-        csv_FD = []
-        for item in tqdm(df_day['Unique_serial_number']):
-            csv_result3 = search_csv(
-                path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/3Dskeleton/Calibrated_3DSkeleton_replace/",
-                name="rec-{}-G1-2022114230_Cali_Data3d".format(item))
-            csv_FD.append(csv_result3[0])
+    # time_state = 6
+    # 多条件筛选
+    # X = choose_data(a, column='split_number', element=time_state)  # split_number=1 not have ''
+    df_day = pd.DataFrame(y, columns=["re_seg_Index"]).drop_duplicates()
+    # data = df_day.values.tolist()
 
-        behavior_file = []
-        for item in tqdm(df_day['Unique_serial_number']):
-            csv_result4 = search_csv(
-                path=r"D:/3D_behavior/Spontaneous_behavior/result_fang/BeAMapping_replace/",
-                name="rec-{}-G1-2022114230_Movement_Labels".format(item))
-            behavior_file.append(csv_result4[0])
+    csv_FD = []
+    for item in tqdm(df_day['re_seg_Index']):
+        csv_result3 = search_csv(
+            path=r"DD:\3D_behavior\Spontaneous_behavior\Sp_behavior_new\results_new\normalized_coordinates/",
+            name="rec-{}-G1_normalized_coordinates".format(item))
+        csv_FD.append(csv_result3[0])
 
-            # location_all = np.zeros((50, 50))
+    behavior_file = []
+    for item in tqdm(df_day['re_seg_Index']):
+        csv_result4 = search_csv(
+            path=r"D:\3D_behavior\Spontaneous_behavior\Sp_behavior_new\results_new\anno_MV_csv/",
+            name="rec-{}-G1-anno_Movement_Labels".format(item))
+        behavior_file.append(csv_result4[0])
 
-            """
-                combine behavior test code
-            """
-            # for j in range(0, len(csv_FD), 6):
+        # location_all = np.zeros((50, 50))
 
-            # for j in range(13, 19, 6):
-            #     data0 = pd.read_csv(csv_FD[j])
-            #     behavior_data0 = pd.read_csv(behavior_file[j])
-            #     behavior_label0 = behavior_data0.iloc[:, 1:2]
-            #
-            #     data1 = pd.read_csv(csv_FD[j + 1])
-            #     behavior_data1 = pd.read_csv(behavior_file[j + 1])
-            #     behavior_label1 = behavior_data1.iloc[:, 1:2]
-            #
-            #     data2 = pd.read_csv(csv_FD[j + 2])
-            #     behavior_data2 = pd.read_csv(behavior_file[j + 2])
-            #     behavior_label2 = behavior_data2.iloc[:, 1:2]
-            #
-            #     data3 = pd.read_csv(csv_FD[j + 3])
-            #     behavior_data3 = pd.read_csv(behavior_file[j + 3])
-            #     behavior_label3 = behavior_data3.iloc[:, 1:2]
-            #
-            #     data4 = pd.read_csv(csv_FD[j + 4])
-            #     behavior_data4 = pd.read_csv(behavior_file[j + 4])
-            #     behavior_label4 = behavior_data4.iloc[:, 1:2]
-            #
-            #     data5 = pd.read_csv(csv_FD[j + 5])
-            #     behavior_data5 = pd.read_csv(behavior_file[j + 5])
-            #     behavior_label5 = behavior_data5.iloc[:, 1:2]
-            #
-            #     data_all = [data0.iloc[2:], data1.iloc[2:], data2.iloc[2:], data3.iloc[2:], data4.iloc[2:], data5.iloc[2:]]
-            #     data_6_all = pd.concat(data_all, axis=0)
-            #     # data_6_all = data_6_all.iloc[2:]
-            #     # rotation_data = rotation(data_6_all)
-            #
-            #     # rotation_data['back'] = normliza_data(rotation_data, data_name='back')
-            #     # rotation_data['back.1'] = normliza_data(rotation_data, data_name='back.1')
-            #     #
-            #     # for x in range(1, 7):
-            #     #     locals()['rotation_data_{}'.format(x)] = rotation_data.iloc[18000 * (x - 1):18000 * x]
-            #     #     locals()['rotation_data_{}'.format(x)]['behavior_label'] = locals()['behavior_label{}'.format(x - 1)]
-            #
-            #     # data1, data2, data3, data4, data5, data6 = combine_behavior(csv_FD, behavior_file, x)
-            #
-            #     # fig = plt.figure(figsize=(6, 6), dpi=300)
-            #     # ax = fig.add_subplot(111)
-            #     # # plt.style.use('ggplot')
-            #     # ax = sns.scatterplot(data=post_data, x="back", y="back.1", hue='behavior_label', size=0.01,
-            #     #                      palette=behavior_color, alpha=0.7, legend=False)
-            #     # ax.add_patch(Rectangle((12.5, 12.5), 25, 25, color="gray", alpha=0.15))
-            #     # color = 'black'
-            #     # alpha_value = 0.7
-            #     # line_value = 0.7
-            #     # ax.plot([0, 0], [0, 50], linewidth=line_value, color=color, alpha=alpha_value)
-            #     # ax.plot([50, 50], [0, 50], linewidth=line_value, color=color, alpha=alpha_value)
-            #     # ax.plot([0, 50], [0, 0], linewidth=line_value, color=color, alpha=alpha_value)
-            #     # ax.plot([0, 50], [50, 50], linewidth=line_value, color=color, alpha=alpha_value)
-            #     # plt.axis('off')
-            #     # plt.show()
-            #     # plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/'
-            #     #             'inside_outside/{}.tiff'.format(j + 1), dpi=300)
-            #     # plt.close()
-            #
-            # df1 = data_6_all.iloc[2:, 36:38]  # select back vector
-            # # df1 = dataframe
-            # df1 = df1.astype(float)
-            # # df1['back'], df1['back.1'] = rotate_around_point_highperf(df1, 0.3, origin=(0, 0))
-            # x_max = df1['back'].max()
-            # # print(df1[df1['back'] == x_max].index.values)
-            # y1 = df1['back.1'][df1[df1['back'] == x_max].index.values]
-            # y1 = y1.values[0]
-            # x_min = df1['back'].min()
-            # y_max = df1['back.1'].max()
-            # y_min = df1['back.1'].min()
-            # x1 = df1['back'][df1[df1['back.1'] == y_min].index.values]
-            # x1 = x1.values[0]
-            #
-            # L1 = y1 - y_min
-            # L2 = x_max - x1
-            # theta = math.atan(L1 / L2) / math.pi * 180
-            #
-            # x_mean = df1['back'].mean()
-            # y_mean = df1['back.1'].mean()
-            #
-            # df2 = df1.copy()
-            # for i in range(len(df1)):
-            #     point = [df1['back'].iloc[i], df1['back.1'].iloc[i]]
-            #     # df2['back'].iloc[i], df2['back.1'].iloc[i] = rotate_around_point_highperf(point, theta, origin=(0, 0))
-            #     df2['back'].iloc[i], df2['back.1'].iloc[i] = rotate_around_point_highperf(point, theta, origin=(0, 0))
-            #
-            # # plot_figure(rotation_data_2)
-            # ax = sns.scatterplot(data=df1, x="back", y="back.1")
-            # ax = sns.scatterplot(data=df2, x="back", y="back.1")
+        """
+            combine behavior test code
+        """
+        # for j in range(0, len(csv_FD), 6):
 
-            """
-                50*50 小方格分析(分析所待时间)
-            """
-            # location_all = np.zeros((50, 50))
-            # for i in range(len(csv_FD)):
-            #     post_data = combine_behavior_1(csv_FD[i], behavior_file[i])
-            #     location = np.zeros((50, 50))
-            #     for t in range(len(post_data['back'])):
-            #         post_data['back'].iloc[t] = int(post_data['back'].iloc[t])
-            #         post_data['back.1'].iloc[t] = int(post_data['back.1'].iloc[t])
-            #         x = int(post_data['back'].iloc[t])
-            #         y = int(post_data['back.1'].iloc[t])
-            #         location[x, y] += 1
-            #
-            #     location_all += location
-            #     print('第{}个文件已计算'.format(i))
-            #
-            # location_all = location_all / len(csv_FD)
-            #
-            # # 画图代码
-            # fig = plt.figure(figsize=(6, 5), dpi=300)
-            # ax = fig.add_subplot(111)
-            # ax = sns.heatmap(location_all, cmap="jet", yticklabels=False, xticklabels=False, vmin=0, vmax=200)
-            # # ax = sns.heatmap(location_all, cmap="rocket", yticklabels=False, xticklabels=False, vmin=0, vmax=150)
-            # plt.tight_layout()
-            # plt.show()
-            # plt.savefig("D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/"
-            #             "safe_area/2500_cell/{}_{}_{}_v2.tiff".format(gender, ExperimentTime, time_state), dpi=300)
-            # plt.close(fig)
-
-            """
-                50*50 小方格mapping
-            """
-            # location_all = np.zeros((50, 50))
-            # class_type = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0,
-            #               9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0}
-            # location_all[0, 0] = class_type
-            # for i in range(len(csv_FD)):
-            #     post_data = combine_behavior_1(csv_FD[i], behavior_file[i])
-            #     location = np.zeros((50, 50))
-            #     for t in range(len(post_data['back'])):
-            #         post_data['back'].iloc[t] = int(post_data['back'].iloc[t])
-            #         post_data['back.1'].iloc[t] = int(post_data['back.1'].iloc[t])
-            #         x = int(post_data['back'].iloc[t])
-            #         y = int(post_data['back.1'].iloc[t])
-            #         location[x, y] += 1
-            #
-            #     location_all += location
-            #     print('第{}个文件已计算'.format(i))
-            #
-            # location_all = location_all / len(csv_FD)
-
-            """
-                ①生成一个三级列表
-                ②第一级是：50行、第二级是：50列、第三级是：行为字典
-            """
-        # list_row = []  # 50行
-        # list_column = []  # 50列，行列确定小格子所处位置
-        # behavior_type = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0,
-        #                  9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0}
-        # for x in range(50):
-        #     tmp = copy.deepcopy(behavior_type)
-        #     list_column.append(tmp)
+        # for j in range(13, 19, 6):
+        #     data0 = pd.read_csv(csv_FD[j])
+        #     behavior_data0 = pd.read_csv(behavior_file[j])
+        #     behavior_label0 = behavior_data0.iloc[:, 1:2]
         #
-        # for x in range(50):
-        #     tmp = copy.deepcopy(list_column)
-        #     list_row.append(tmp)
+        #     data1 = pd.read_csv(csv_FD[j + 1])
+        #     behavior_data1 = pd.read_csv(behavior_file[j + 1])
+        #     behavior_label1 = behavior_data1.iloc[:, 1:2]
+        #
+        #     data2 = pd.read_csv(csv_FD[j + 2])
+        #     behavior_data2 = pd.read_csv(behavior_file[j + 2])
+        #     behavior_label2 = behavior_data2.iloc[:, 1:2]
+        #
+        #     data3 = pd.read_csv(csv_FD[j + 3])
+        #     behavior_data3 = pd.read_csv(behavior_file[j + 3])
+        #     behavior_label3 = behavior_data3.iloc[:, 1:2]
+        #
+        #     data4 = pd.read_csv(csv_FD[j + 4])
+        #     behavior_data4 = pd.read_csv(behavior_file[j + 4])
+        #     behavior_label4 = behavior_data4.iloc[:, 1:2]
+        #
+        #     data5 = pd.read_csv(csv_FD[j + 5])
+        #     behavior_data5 = pd.read_csv(behavior_file[j + 5])
+        #     behavior_label5 = behavior_data5.iloc[:, 1:2]
+        #
+        #     data_all = [data0.iloc[2:], data1.iloc[2:], data2.iloc[2:], data3.iloc[2:], data4.iloc[2:], data5.iloc[2:]]
+        #     data_6_all = pd.concat(data_all, axis=0)
+        #     # data_6_all = data_6_all.iloc[2:]
+        #     # rotation_data = rotation(data_6_all)
+        #
+        #     # rotation_data['back'] = normliza_data(rotation_data, data_name='back')
+        #     # rotation_data['back.1'] = normliza_data(rotation_data, data_name='back.1')
+        #     #
+        #     # for x in range(1, 7):
+        #     #     locals()['rotation_data_{}'.format(x)] = rotation_data.iloc[18000 * (x - 1):18000 * x]
+        #     #     locals()['rotation_data_{}'.format(x)]['behavior_label'] = locals()['behavior_label{}'.format(x - 1)]
+        #
+        #     # data1, data2, data3, data4, data5, data6 = combine_behavior(csv_FD, behavior_file, x)
+        #
+        #     # fig = plt.figure(figsize=(6, 6), dpi=300)
+        #     # ax = fig.add_subplot(111)
+        #     # # plt.style.use('ggplot')
+        #     # ax = sns.scatterplot(data=post_data, x="back", y="back.1", hue='behavior_label', size=0.01,
+        #     #                      palette=behavior_color, alpha=0.7, legend=False)
+        #     # ax.add_patch(Rectangle((12.5, 12.5), 25, 25, color="gray", alpha=0.15))
+        #     # color = 'black'
+        #     # alpha_value = 0.7
+        #     # line_value = 0.7
+        #     # ax.plot([0, 0], [0, 50], linewidth=line_value, color=color, alpha=alpha_value)
+        #     # ax.plot([50, 50], [0, 50], linewidth=line_value, color=color, alpha=alpha_value)
+        #     # ax.plot([0, 50], [0, 0], linewidth=line_value, color=color, alpha=alpha_value)
+        #     # ax.plot([0, 50], [50, 50], linewidth=line_value, color=color, alpha=alpha_value)
+        #     # plt.axis('off')
+        #     # plt.show()
+        #     # plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area/'
+        #     #             'inside_outside/{}.tiff'.format(j + 1), dpi=300)
+        #     # plt.close()
+        #
+        # df1 = data_6_all.iloc[2:, 36:38]  # select back vector
+        # # df1 = dataframe
+        # df1 = df1.astype(float)
+        # # df1['back'], df1['back.1'] = rotate_around_point_highperf(df1, 0.3, origin=(0, 0))
+        # x_max = df1['back'].max()
+        # # print(df1[df1['back'] == x_max].index.values)
+        # y1 = df1['back.1'][df1[df1['back'] == x_max].index.values]
+        # y1 = y1.values[0]
+        # x_min = df1['back'].min()
+        # y_max = df1['back.1'].max()
+        # y_min = df1['back.1'].min()
+        # x1 = df1['back'][df1[df1['back.1'] == y_min].index.values]
+        # x1 = x1.values[0]
+        #
+        # L1 = y1 - y_min
+        # L2 = x_max - x1
+        # theta = math.atan(L1 / L2) / math.pi * 180
+        #
+        # x_mean = df1['back'].mean()
+        # y_mean = df1['back.1'].mean()
+        #
+        # df2 = df1.copy()
+        # for i in range(len(df1)):
+        #     point = [df1['back'].iloc[i], df1['back.1'].iloc[i]]
+        #     # df2['back'].iloc[i], df2['back.1'].iloc[i] = rotate_around_point_highperf(point, theta, origin=(0, 0))
+        #     df2['back'].iloc[i], df2['back.1'].iloc[i] = rotate_around_point_highperf(point, theta, origin=(0, 0))
+        #
+        # # plot_figure(rotation_data_2)
+        # ax = sns.scatterplot(data=df1, x="back", y="back.1")
+        # ax = sns.scatterplot(data=df2, x="back", y="back.1")
+
+        """
+            50*50 小方格分析(分析所待时间)
+        """
+        # location_all = np.zeros((50, 50))
+        # for i in range(len(csv_FD)):
+        #     post_data = combine_behavior_1(csv_FD[i], behavior_file[i])
+        #     location = np.zeros((50, 50))
+        #     for t in range(len(post_data['back'])):
+        #         post_data['back'].iloc[t] = int(post_data['back'].iloc[t])
+        #         post_data['back.1'].iloc[t] = int(post_data['back.1'].iloc[t])
+        #         x = int(post_data['back'].iloc[t])
+        #         y = int(post_data['back.1'].iloc[t])
+        #         location[x, y] += 1
+        #
+        #     location_all += location
+        #     print('第{}个文件已计算'.format(i))
+        #
+        # location_all = location_all / len(csv_FD)
+        #
+        # # 画图代码
+        # fig = plt.figure(figsize=(6, 5), dpi=300)
+        # ax = fig.add_subplot(111)
+        # ax = sns.heatmap(location_all, cmap="jet", yticklabels=False, xticklabels=False, vmin=0, vmax=200)
+        # # ax = sns.heatmap(location_all, cmap="rocket", yticklabels=False, xticklabels=False, vmin=0, vmax=150)
+        # plt.tight_layout()
+        # plt.show()
+        # plt.savefig("D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/"
+        #             "safe_area/2500_cell/{}_{}_{}_v2.tiff".format(gender, ExperimentTime, time_state), dpi=300)
+        # plt.close(fig)
+
+        """
+            50*50 小方格mapping
+        """
+        # location_all = np.zeros((50, 50))
+        # class_type = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0,
+        #               9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0}
+        # location_all[0, 0] = class_type
+        # for i in range(len(csv_FD)):
+        #     post_data = combine_behavior_1(csv_FD[i], behavior_file[i])
+        #     location = np.zeros((50, 50))
+        #     for t in range(len(post_data['back'])):
+        #         post_data['back'].iloc[t] = int(post_data['back'].iloc[t])
+        #         post_data['back.1'].iloc[t] = int(post_data['back.1'].iloc[t])
+        #         x = int(post_data['back'].iloc[t])
+        #         y = int(post_data['back.1'].iloc[t])
+        #         location[x, y] += 1
+        #
+        #     location_all += location
+        #     print('第{}个文件已计算'.format(i))
+        #
+        # location_all = location_all / len(csv_FD)
+
+        """
+            ①生成一个三级列表
+            ②第一级是：50行、第二级是：50列、第三级是：行为字典
+        """
+        # list_row = []  # 50行
+    # list_column = []  # 50列，行列确定小格子所处位置
+    # behavior_type = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0,
+    #                  9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0}
+    # for x in range(50):
+    #     tmp = copy.deepcopy(behavior_type)
+    #     list_column.append(tmp)
+    #
+    # for x in range(50):
+    #     tmp = copy.deepcopy(list_column)
+    #     list_row.append(tmp)
 
         behavior_type = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0,
-                         9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0}
+                         9: 0, 10: 0, 11: 0, 12: 0, 13: 0}
 
         total_behavior = []
         for i in range(50 * 50):
@@ -466,10 +488,8 @@ if __name__ == '__main__':
 
         behavior_list1 = np.array(behavior_list).reshape(50, 50)
         behavior_list1[0:1, :] = behavior_list1[49:50, :] = behavior_list1[:, 0:1] = behavior_list1[:, 49:50] = 15
-        color_list = ['#D53624', '#FF6F91', '#FF9671', '#FFC75F', '#C34A36',
-                      '#00C2A8', '#00a3af', '#008B74', '#D5CABD', '#D65DB1',
-                      '#cb3a56', '#845EC2', '#B39CD0', '#98d98e', '#4B4453']
-        colormap = sns.color_palette(color_list)
+
+        colormap = sns.color_palette(behavior_color)
         # colormap = sns.color_palette("hls")
         fig = plt.figure(figsize=(5, 5), dpi=300)
         ax = fig.add_subplot(111)
@@ -477,9 +497,9 @@ if __name__ == '__main__':
         # ax = sns.heatmap(behavior_list1, cmap=colormap[1:], xticklabels=False, yticklabels=False)
         plt.tight_layout()
         plt.show()
-        plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area'
-                    '/mapping/state{}.tiff'.format(time_state), dpi=300)
-        plt.close()
+        # plt.savefig('D:/3D_behavior/Spontaneous_behavior/result_circle/analysis_result/safe_area'
+        #             '/mapping/state{}.tiff'.format(time_state), dpi=300)
+        # plt.close()
 
     """
         5个区域分析
